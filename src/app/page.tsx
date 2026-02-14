@@ -1,13 +1,10 @@
 "use client";
 
-import { FooterSection } from '@/components/home/FooterSection';
 import { HeroSection } from '@/components/home/HeroSection';
-import { BrandMarqueeSection } from '@/components/home/BrandMarqueeSection';
-import { WhyChooseSection } from '@/components/home/WhyChooseSection';
-import { ProcessSection } from '@/components/home/ProcessSection';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
-import { FeaturedMachinery } from '@/components/home/FeaturedMachinery';
 import { TestimonialsSection } from '@/components/home/TestimonialsSection';
+import { CategoriesSection } from '@/components/home/premium/CategoriesSection';
+import { CTAFooterSection } from '@/components/home/premium/CTAFooterSection';
 
 export default function Home() {
     return (
@@ -16,13 +13,15 @@ export default function Home() {
             <div className="grain-overlay" />
 
             <HeroSection />
-            <BrandMarqueeSection />
-            <WhyChooseSection />
-            <ProcessSection />
-            <FeaturedMachinery />
+
+            {/* Categories - with images */}
+            <CategoriesSection />
+
             <FeaturedProducts />
             <TestimonialsSection />
-            <FooterSection />
+
+            {/* CTA + Footer */}
+            <CTAFooterSection />
         </main>
     );
 }

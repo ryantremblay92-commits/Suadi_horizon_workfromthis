@@ -343,3 +343,76 @@ a:hover {
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-navy;
 }
+
+/* Section Padding */
+.section-padding {
+  padding: 8rem 0;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 4rem 0;
+  }
+}
+
+/* Container */
+.container-premium {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .container-premium {
+    padding: 0 1rem;
+  }
+}
+
+/* Micro Label */
+.micro-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-gold);
+}
+
+/* Premium Card */
+.card-premium {
+  background: var(--color-surface);
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-premium:hover {
+  border-color: rgba(197, 160, 89, 0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Glass Premium */
+.glass-premium {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-premium:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-gold);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(197, 160, 89, 0.15);
+}
+
+/* Gradient Overlays */
+.gradient-hero-overlay {
+  background: linear-gradient(135deg, rgba(5, 7, 10, 0.92) 0%, rgba(5, 7, 10, 0.4) 60%, transparent 100%);
+}
+
+.gradient-accent-glow {
+  background: radial-gradient(ellipse at center, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+}

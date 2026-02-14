@@ -71,22 +71,44 @@ export function WhyChooseSection() {
             <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
-                <motion.div
-                    ref={ref}
-                    className="text-center mb-16"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                >
-                    <span className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4 block font-display">Why Choose Us</span>
-                    <h2 className="text-3xl md:text-5xl font-bold text-white font-display mb-6 leading-tight">
-                        Engineering Excellence &{" "}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-200">Unmatched Reliability</span>
-                    </h2>
-                    <p className="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">
-                        We don't just supply parts; we deliver peace of mind. Our rigorous quality standards and deep technical expertise ensure that your machinery operates at peak performance.
-                    </p>
-                </motion.div>
+                <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
+                    <motion.div
+                        ref={ref}
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <span className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4 block font-display">Why Choose Us</span>
+                        <h2 className="text-3xl md:text-5xl font-bold text-white font-display mb-6 leading-tight">
+                            Engineering Excellence &{" "}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-200">Unmatched Reliability</span>
+                        </h2>
+                        <p className="text-slate-300 text-lg leading-relaxed font-light">
+                            We don't just supply parts; we deliver peace of mind. Our rigorous quality standards and deep technical expertise ensure that your machinery operates at peak performance.
+                        </p>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="relative"
+                    >
+                        <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 group">
+                            <img
+                                src="/images/why_choose_bg.png"
+                                alt="Industrial Excellence"
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-60" />
+                        </div>
+                        {/* Decorative Badge */}
+                        <div className="absolute -bottom-6 -right-6 glass p-6 border-l-4 border-gold hidden md:block">
+                            <div className="text-3xl font-bold text-white mb-1">15+ Years</div>
+                            <div className="text-xs text-gold uppercase tracking-widest font-bold">Industrial Expertise</div>
+                        </div>
+                    </motion.div>
+                </div>
 
                 {/* Modern Bento Grid - 4 columns on large screens */}
                 <motion.div
