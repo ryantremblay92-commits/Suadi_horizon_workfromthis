@@ -37,30 +37,32 @@ body {
   h5,
   h6 {
     font-family: var(--font-heading, var(--font-sans, system-ui));
-    font-weight: 600;
-    line-height: 1.25;
+    font-weight: 700;
+    line-height: 1.15;
     color: #FFFFFF;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
   }
 
   h1 {
-    font-size: 2.5rem;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.1;
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: clamp(1.875rem, 3vw, 3rem);
+    line-height: 1.15;
   }
 
   h3 {
-    font-size: 1.75rem;
+    font-size: clamp(1.5rem, 2vw, 2rem);
   }
 
   h4 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   h5 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   h6 {
@@ -68,8 +70,56 @@ body {
   }
 
   p {
-    line-height: 1.625;
-    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.0625rem;
+  }
+
+  /* Enhanced heading utilities */
+  .heading-display {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .heading-lg {
+    font-size: clamp(2.25rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+
+  .heading-md {
+    font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  /* Body text variants */
+  .text-body-lg {
+    font-size: 1.1875rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .text-body-md {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .text-body-sm {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .text-body-xs {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.55);
   }
 }
 
@@ -285,6 +335,12 @@ a:hover {
   background-size: 200% auto;
 }
 
+.text-gradient-white {
+  background: linear-gradient(135deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .gpu-accelerated {
   will-change: transform;
   transform: translateZ(0);
@@ -346,7 +402,7 @@ a:hover {
 
 /* Section Padding */
 .section-padding {
-  padding: 8rem 0;
+  padding: 4rem 0;
 }
 
 @media (max-width: 768px) {
@@ -373,7 +429,7 @@ a:hover {
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.2em;
   color: var(--color-gold);
 }
 
@@ -415,4 +471,95 @@ a:hover {
 
 .gradient-accent-glow {
   background: radial-gradient(ellipse at center, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+}
+
+/* =========================================
+   BUTTON STYLES
+   ========================================= */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: var(--color-gold);
+  color: var(--color-navy);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 24px rgba(197, 160, 89, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  background: #D4B475;
+  box-shadow: 0 8px 32px rgba(197, 160, 89, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: transparent;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: rgba(197, 160, 89, 0.08);
+}
+
+/* =========================================
+   SECTION STYLES
+   ========================================= */
+.section-spacing {
+  padding: clamp(4rem, 5vw, 6rem) 0;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+}
+
+/* =========================================
+   SPECIAL SECTION UTILITIES
+   ========================================= */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(197, 160, 89, 0.2) 50%, transparent 100%);
+  position: relative;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-gold);
 }

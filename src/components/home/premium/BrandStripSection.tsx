@@ -4,16 +4,16 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const brands = [
-    { name: "CATERPILLAR", logo: "🐱" },
-    { name: "JCB", logo: "🚜" },
-    { name: "PERKINS", logo: "⚙️" },
-    { name: "CUMMINS", logo: "🔧" },
-    { name: "KMP", logo: "🔩" },
-    { name: "KOMATSU", logo: "🏗️" },
-    { name: "VOLVO", logo: "🚧" },
-    { name: "HITACHI", logo: "🏭" },
-    { name: "KUBOTA", logo: "🌾" },
-    { name: "MITSUBISHI", logo: "🔶" },
+    { name: "CATERPILLAR", short: "CAT" },
+    { name: "KOMATSU", short: "KMT" },
+    { name: "VOLVO", short: "VLV" },
+    { name: "HITACHI", short: "HTC" },
+    { name: "DOOSAN", short: "DSN" },
+    { name: "HYUNDAI", short: "HYN" },
+    { name: "BOBCAT", short: "BBC" },
+    { name: "JCB", short: "JCB" },
+    { name: "CASE", short: "CASE" },
+    { name: "TEREX", short: "TRX" },
 ];
 
 export function BrandStripSection() {
@@ -21,42 +21,51 @@ export function BrandStripSection() {
     const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
     return (
-        <section className="py-12 bg-[var(--color-bg-secondary)] border-y border-white/5 overflow-hidden">
-            {/* Fade Edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-[var(--color-bg-secondary)] to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-[var(--color-bg-secondary)] to-transparent pointer-events-none" />
+        <section className="py-12 bg-surface border-y border-white/5 overflow-hidden relative">
+            {/* Gloss Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
 
-            {/* Brand Marquee */}
-            <div ref={containerRef} className="flex overflow-hidden">
+            <div className="container-premium relative z-10">
                 <motion.div
-                    className="flex items-center gap-16 whitespace-nowrap"
-                    animate={{
-                        x: [0, -50 * brands.length * 4],
-                    }}
-                    transition={{
-                        duration: 30,
-                        repeat: Infinity,
-                        ease: "linear",
-                    }}
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : {}}
+                    className="text-center mb-8"
                 >
-                    {/* Double the brands for seamless loop */}
-                    {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
-                        <motion.div
-                            key={`${brand.name}-${index}`}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                            transition={{ duration: 0.5, delay: (index % brands.length) * 0.05 }}
-                            className="group flex items-center gap-3 cursor-pointer"
-                        >
-                            <span className="text-3xl grayscale group-hover:grayscale-0 transition-all duration-500 opacity-50 group-hover:opacity-100">
-                                {brand.logo}
-                            </span>
-                            <span className="text-lg font-semibold text-[rgba(255,255,255,0.4)] group-hover:text-white transition-colors duration-300 tracking-wider" style={{ fontFamily: 'var(--font-heading)' }}>
-                                {brand.name}
-                            </span>
-                        </motion.div>
-                    ))}
+                    <span className="micro-label text-white/30">SUPPORTING THE WORLD'S LEADING FLEETS</span>
                 </motion.div>
+
+                <div ref={containerRef} className="relative">
+                    {/* Fade Edges */}
+                    <div className="absolute left-0 top-0 bottom-0 w-24 z-20 bg-gradient-to-r from-surface to-transparent pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-24 z-20 bg-gradient-to-l from-surface to-transparent pointer-events-none" />
+
+                    <div className="flex overflow-hidden">
+                        <motion.div
+                            className="flex items-center gap-20 whitespace-nowrap"
+                            animate={{
+                                x: [0, -120 * brands.length],
+                            }}
+                            transition={{
+                                duration: 35,
+                                repeat: Infinity,
+                                ease: "linear",
+                            }}
+                        >
+                            {/* Seamless loop with triple items for safe coverage */}
+                            {[...brands, ...brands, ...brands].map((brand, index) => (
+                                <div
+                                    key={`${brand.name}-${index}`}
+                                    className="group flex flex-col items-center justify-center cursor-default"
+                                >
+                                    <span className="text-2xl md:text-3xl font-black text-white/10 group-hover:text-gold/50 transition-all duration-500 tracking-tighter" style={{ fontFamily: 'var(--font-display)' }}>
+                                        {brand.name}
+                                    </span>
+                                    <div className="h-0.5 w-0 group-hover:w-full bg-gold/40 transition-all duration-700 mt-1.5" />
+                                </div>
+                            ))}
+                        </motion.div>
+                    </div>
+                </div>
             </div>
         </section>
     );

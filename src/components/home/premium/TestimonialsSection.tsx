@@ -36,7 +36,7 @@ export function TestimonialsSection() {
     const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
     return (
-        <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+        <section className="relative min-h-[80vh] flex items-center overflow-hidden py-24 lg:py-32">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <div
@@ -50,16 +50,16 @@ export function TestimonialsSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-primary)] via-transparent to-[var(--color-bg-primary)]" />
             </div>
 
-            <div className="container-premium relative z-10 py-24">
+            <div className="container-premium relative z-10 py-16">
                 {/* Quote Icon */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="flex justify-center mb-12"
+                    className="flex justify-center mb-14"
                 >
-                    <div className="w-20 h-20 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center">
-                        <Quote className="w-10 h-10 text-[var(--color-accent)]" />
+                    <div className="w-24 h-24 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center">
+                        <Quote className="w-12 h-12 text-[var(--color-accent)]" />
                     </div>
                 </motion.div>
 
@@ -71,7 +71,7 @@ export function TestimonialsSection() {
                     className="text-center mb-16"
                 >
                     <span className="micro-label mb-4 block">CLIENT SUCCESS STORIES</span>
-                    <h2>Trusted by Industry Leaders</h2>
+                    <h2 className="heading-md">Trusted by Industry Leaders</h2>
                 </motion.div>
 
                 {/* Testimonials */}
@@ -83,23 +83,23 @@ export function TestimonialsSection() {
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 + index * 0.15 }}
                         >
-                            <div className="glass-premium rounded-[var(--radius-lg)] p-8 h-full">
+                            <div className="glass-premium rounded-[var(--radius-lg)] p-9 h-full">
                                 {/* Quote */}
-                                <Quote className="w-8 h-8 text-[var(--color-accent)] mb-4 opacity-50" />
-                                <p className="text-lg text-[rgba(255,255,255,0.8)] mb-8 leading-relaxed">
+                                <Quote className="w-10 h-10 text-[var(--color-accent)] mb-5 opacity-50" />
+                                <p className="text-body-lg text-white/80 mb-8 leading-relaxed">
                                     "{testimonial.quote}"
                                 </p>
 
                                 {/* Author */}
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold">
+                                    <div className="w-14 h-14 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold text-lg">
                                         {testimonial.initials}
                                     </div>
                                     <div>
-                                        <div className="font-semibold text-white">
+                                        <div className="font-semibold text-white text-lg">
                                             {testimonial.author}
                                         </div>
-                                        <div className="text-sm text-[rgba(255,255,255,0.5)]">
+                                        <div className="text-sm text-white/50 font-medium">
                                             {testimonial.role}, {testimonial.company}
                                         </div>
                                     </div>

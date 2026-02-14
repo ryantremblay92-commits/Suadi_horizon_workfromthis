@@ -1,4 +1,6 @@
 "use client";
+// Cache bust: v2.2.0 - Enhanced typography and spacing
+
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -7,7 +9,7 @@ import { ArrowRight, ChevronDown, MessageCircle } from "lucide-react";
 
 export function HeroSection() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+    const isInView = useInView(containerRef, { once: true, margin: "0px" });
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -38,7 +40,7 @@ export function HeroSection() {
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
-                        backgroundImage: "url('/images/hero_bg.jpg')",
+                        backgroundImage: "url('/images/home/hero_bulldozer.png')",
                     }}
                 />
                 {/* Gradient Overlay */}
@@ -62,23 +64,23 @@ export function HeroSection() {
                             SINCE 2009 — PREMIUM EQUIPMENT PARTS
                         </motion.div>
 
-                        {/* Headline */}
+                        {/* Headline - Enhanced with new typography */}
                         <motion.h1
                             initial={{ opacity: 0, y: 40 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="mb-6"
+                            className="heading-lg mb-8"
                         >
                             Engineered for{" "}
                             <span className="text-gradient-gold">performance.</span>
                         </motion.h1>
 
-                        {/* Subheadline */}
+                        {/* Subheadline - Enhanced */}
                         <motion.p
                             initial={{ opacity: 0, y: 40 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.8, delay: 0.3 }}
-                            className="text-lg md:text-xl text-[rgba(255,255,255,0.7)] mb-10 max-w-xl"
+                            className="text-body-lg text-white/70 mb-12 max-w-xl"
                         >
                             Genuine OEM and aftermarket spare parts for the world's toughest machines.
                             Your equipment's reliability starts here.
@@ -108,8 +110,8 @@ export function HeroSection() {
                         transition={{ duration: 0.8, delay: 0.5 }}
                         className="hidden lg:block"
                     >
-                        <div className="glass-premium rounded-[var(--radius-lg)] p-8 backdrop-blur-xl">
-                            <div className="grid grid-cols-2 gap-8">
+                        <div className="glass-premium rounded-[var(--radius-lg)] p-10 backdrop-blur-xl">
+                            <div className="grid grid-cols-2 gap-10">
                                 {stats.map((stat, index) => (
                                     <motion.div
                                         key={stat.label}
@@ -118,10 +120,10 @@ export function HeroSection() {
                                         transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
                                         className="text-center"
                                     >
-                                        <div className="text-4xl md:text-5xl font-bold text-gradient-gold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                                        <div className="text-5xl md:text-6xl font-bold text-gradient-gold mb-3" style={{ fontFamily: 'var(--font-display)' }}>
                                             {stat.value}
                                         </div>
-                                        <div className="text-sm text-[rgba(255,255,255,0.5)] uppercase tracking-wider">
+                                        <div className="text-sm text-white/50 uppercase tracking-widest font-medium">
                                             {stat.label}
                                         </div>
                                     </motion.div>
@@ -142,9 +144,9 @@ export function HeroSection() {
                 <motion.div
                     animate={{ y: [0, 10, 0] }}
                     transition={{ duration: 2, repeat: Infinity }}
-                    className="flex flex-col items-center gap-2 text-[rgba(255,255,255,0.4)]"
+                    className="flex flex-col items-center gap-2 text-white/40"
                 >
-                    <span className="text-xs uppercase tracking-widest">Scroll</span>
+                    <span className="text-xs uppercase tracking-widest font-medium">Scroll</span>
                     <ChevronDown className="w-5 h-5" />
                 </motion.div>
             </motion.div>

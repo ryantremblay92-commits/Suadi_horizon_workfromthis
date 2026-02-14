@@ -8,43 +8,43 @@ import Link from "next/link";
 const categories = [
     {
         name: "Engine Parts",
-        description: "Genuine engines, filters, pumps & components",
-        image: "/images/category_engine_1771103460342.png",
+        description: "Premium power solutions, filters, pumps & precision components",
+        image: "/images/home/engine.png",
         count: 156,
         featured: true,
     },
     {
         name: "Hydraulic Systems",
-        description: "Cylinders, pumps, valves & hoses",
-        image: "/images/category_hydraulics_1771103478320.png",
+        description: "Industrial-grade cylinders, pumps, valves & reinforced hoses",
+        image: "/images/home/hydraulics.png",
         count: 98,
         featured: false,
     },
     {
         name: "Electrical Parts",
-        description: "Starters, alternators, sensors & wiring",
-        image: "/images/category_electrical_1771103498559.png",
+        description: "Advanced starters, alternators, smart sensors & wiring looms",
+        image: "/images/home/electrical.png",
         count: 124,
         featured: false,
     },
     {
         name: "Transmission",
-        description: "Gears, torque converters & clutches",
-        image: "/images/category_transmission_1771103409895.png",
+        description: "Precision-engineered gears, torque converters & heavy-duty clutches",
+        image: "/images/home/transmission.png",
         count: 87,
         featured: false,
     },
     {
         name: "Undercarriage",
-        description: "Tracks, rollers, idlers & sprockets",
-        image: "/images/category_undercarriage_1771103424285.png",
+        description: "Durable tracks, rollers, idlers & high-performance sprockets",
+        image: "/images/home/undercarriage.png",
         count: 112,
         featured: false,
     },
     {
         name: "Attachments",
-        description: "Buckets, blades, hammers & couplers",
-        image: "/images/category_attachments_1771103438577.png",
+        description: "Specialized buckets, blades, hammers & quick couplers",
+        image: "/images/home/attachments.png",
         count: 143,
         featured: true,
     },
@@ -55,7 +55,7 @@ export function CategoriesSection() {
     const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
     return (
-        <section className="section-padding bg-[var(--color-bg-secondary)]">
+        <section className="py-20 lg:py-28 bg-[var(--color-bg-secondary)]">
             <div className="container-premium">
                 {/* Section Header */}
                 <motion.div
@@ -66,7 +66,7 @@ export function CategoriesSection() {
                 >
                     <div className="max-w-2xl">
                         <span className="micro-label mb-4 block">PRODUCT CATEGORIES</span>
-                        <h2>Everything Your Equipment Needs</h2>
+                        <h2 className="heading-md">Everything Your Equipment Needs</h2>
                     </div>
                     <Link
                         href="/categories"
@@ -77,60 +77,63 @@ export function CategoriesSection() {
                     </Link>
                 </motion.div>
 
-                {/* Masonry Grid */}
-                <div ref={containerRef} className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {/* Enhanced Grid Layout */}
+                <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {categories.map((category, index) => (
                         <motion.div
                             key={category.name}
                             initial={{ opacity: 0, y: 40 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`group relative overflow-hidden rounded-[var(--radius-lg)] ${category.featured
-                                ? "md:col-span-2 md:row-span-2"
-                                : "md:col-span-1"
-                                }`}
+                            className="group relative h-[440px] overflow-hidden rounded-[2rem] border border-white/10"
                         >
-                            {/* Image */}
+                            {/* Category Image */}
                             <div className="absolute inset-0">
                                 <img
                                     src={category.image}
                                     alt={category.name}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                 />
-                                {/* Gradient Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-primary)] via-transparent to-transparent" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                {/* Sophisticated Overlays */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-primary)] via-[var(--color-bg-primary)]/40 to-transparent" />
+                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-500" />
                             </div>
 
-                            {/* Content */}
-                            <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                                {/* Badge */}
-                                <div className="absolute top-4 right-4">
-                                    <span className="px-3 py-1 bg-[var(--color-accent)] text-[var(--color-bg-primary)] text-xs font-bold uppercase tracking-wider rounded-full">
-                                        {category.count} Items
-                                    </span>
+                            {/* Content Overlay */}
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                                {/* Top Badge - Count */}
+                                <div className="absolute top-8 right-8">
+                                    <div className="glass-premium px-5 py-2.5 rounded-full border border-white/10">
+                                        <span className="text-[var(--color-accent)] font-bold text-sm tracking-tight">
+                                            {category.count} <span className="text-white/60 font-normal">Items</span>
+                                        </span>
+                                    </div>
                                 </div>
 
-                                {/* Text */}
-                                <h3 className="text-2xl mb-2 group-hover:text-[var(--color-accent)] transition-colors">
-                                    {category.name}
-                                </h3>
-                                <p className="text-[rgba(255,255,255,0.6)] text-sm mb-4 line-clamp-2">
-                                    {category.description}
-                                </p>
+                                {/* Category Title & Description */}
+                                <div className="space-y-3 transform translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
+                                    <h3 className="text-3xl font-bold text-white tracking-tight">
+                                        {category.name}
+                                    </h3>
+                                    <p className="text-white/60 line-clamp-2 text-base leading-relaxed max-w-[90%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                        {category.description}
+                                    </p>
 
-                                {/* Link */}
-                                <Link
-                                    href={`/categories?category=${category.name.toLowerCase().replace(' ', '-')}`}
-                                    className="inline-flex items-center gap-2 text-[var(--color-accent)] text-sm font-semibold uppercase tracking-wider opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
-                                >
-                                    Explore
-                                    <ArrowRight className="w-4 h-4" />
-                                </Link>
+                                    {/* Action Button */}
+                                    <div className="pt-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                                        <Link
+                                            href={`/categories?category=${category.name.toLowerCase().replace(' ', '-')}`}
+                                            className="inline-flex items-center gap-3 px-7 py-3.5 bg-[var(--color-accent)] text-[var(--color-bg-primary)] rounded-full font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors group/btn"
+                                        >
+                                            Explore Category
+                                            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Border */}
-                            <div className="absolute inset-0 border border-white/10 group-hover:border-[var(--color-accent)]/50 rounded-[var(--radius-lg)] transition-colors duration-300" />
+                            {/* Decorative Edge Glow */}
+                            <div className="absolute inset-0 border border-white/5 group-hover:border-[var(--color-accent)]/30 rounded-[2rem] transition-colors duration-500" />
                         </motion.div>
                     ))}
                 </div>

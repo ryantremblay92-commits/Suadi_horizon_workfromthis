@@ -48,41 +48,41 @@ export function FeaturesGridSection() {
     const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
     return (
-        <section className="section-padding bg-[var(--color-bg-primary)]">
+        <section className="py-20 lg:py-28 bg-[var(--color-bg-primary)]">
             <div className="container-premium">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center max-w-2xl mx-auto mb-16"
+                    className="text-center max-w-3xl mx-auto mb-20"
                 >
                     <span className="micro-label mb-4 block">WHY CHOOSE US</span>
-                    <h2 className="mb-6">Built Different</h2>
-                    <p className="text-[rgba(255,255,255,0.6)]">
+                    <h2 className="heading-md mb-6">Built Different</h2>
+                    <p className="text-body-lg text-white/60">
                         We're not just a parts supplier. We're your strategic partner in keeping
                         heavy machinery running at peak performance.
                     </p>
                 </motion.div>
 
                 {/* Features Grid */}
-                <div ref={containerRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div ref={containerRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {features.map((feature, index) => (
                         <motion.div
                             key={feature.title}
                             initial={{ opacity: 0, y: 40 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className="card-premium group"
+                            className="card-premium group p-8"
                         >
                             {/* Icon */}
-                            <div className="w-14 h-14 rounded-[var(--radius-md)] bg-[var(--color-accent)]/10 flex items-center justify-center mb-6 group-hover:bg-[var(--color-accent)]/20 transition-colors">
-                                <feature.icon className="w-7 h-7 text-[var(--color-accent)]" />
+                            <div className="w-16 h-16 rounded-[var(--radius-md)] bg-[var(--color-accent)]/10 flex items-center justify-center mb-6 group-hover:bg-[var(--color-accent)]/20 transition-colors">
+                                <feature.icon className="w-8 h-8 text-[var(--color-accent)]" />
                             </div>
 
                             {/* Content */}
-                            <h4 className="mb-3 text-xl">{feature.title}</h4>
-                            <p className="text-[rgba(255,255,255,0.6)] mb-6 leading-relaxed">
+                            <h4 className="mb-4 text-xl font-bold">{feature.title}</h4>
+                            <p className="text-body-sm text-white/60 mb-6 leading-relaxed">
                                 {feature.description}
                             </p>
 

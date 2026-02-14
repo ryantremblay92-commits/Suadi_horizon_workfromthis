@@ -48,9 +48,9 @@ export function CTAFooterSection() {
     return (
         <>
             {/* Footer only - CTA removed */}
-            <footer ref={footerRef} className="bg-[var(--color-bg-secondary)] pt-20 pb-8">
+            <footer ref={footerRef} className="bg-[var(--color-bg-secondary)] pt-24 pb-8">
                 <div className="container-premium">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
                         {/* Brand Column */}
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
@@ -63,17 +63,17 @@ export function CTAFooterSection() {
                                     SAUDI <span className="text-[var(--color-accent)]">HORIZON</span>
                                 </span>
                             </Link>
-                            <p className="text-[rgba(255,255,255,0.6)] mb-6">
+                            <p className="text-body-md text-white/60 mb-8">
                                 Premier supplier of heavy machinery parts and industrial equipment
                                 across the Kingdom of Saudi Arabia and the Middle East.
                             </p>
                             {/* Social Links */}
-                            <div className="flex gap-4">
+                            <div className="flex gap-3">
                                 {socialLinks.map((social) => (
                                     <a
                                         key={social.label}
                                         href={social.href}
-                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[var(--color-accent)] hover:text-[var(--color-bg-primary)] transition-colors"
+                                        className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center hover:bg-[var(--color-accent)] hover:text-[var(--color-bg-primary)] transition-colors"
                                         aria-label={social.label}
                                     >
                                         <social.icon className="w-5 h-5" />
@@ -88,13 +88,13 @@ export function CTAFooterSection() {
                             animate={footerInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.1 }}
                         >
-                            <h4 className="text-lg mb-6">Quick Links</h4>
-                            <ul className="space-y-3">
+                            <h4 className="text-lg font-bold mb-6">Quick Links</h4>
+                            <ul className="space-y-3.5">
                                 {quickLinks.map((link) => (
                                     <li key={link.label}>
                                         <Link
                                             href={link.href}
-                                            className="text-[rgba(255,255,255,0.6)] hover:text-[var(--color-accent)] transition-colors"
+                                            className="text-body-md text-white/60 hover:text-[var(--color-accent)] transition-colors"
                                         >
                                             {link.label}
                                         </Link>
@@ -109,13 +109,13 @@ export function CTAFooterSection() {
                             animate={footerInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 }}
                         >
-                            <h4 className="text-lg mb-6">Product Categories</h4>
-                            <ul className="space-y-3">
+                            <h4 className="text-lg font-bold mb-6">Product Categories</h4>
+                            <ul className="space-y-3.5">
                                 {productCategories.map((link) => (
                                     <li key={link.label}>
                                         <Link
                                             href={link.href}
-                                            className="text-[rgba(255,255,255,0.6)] hover:text-[var(--color-accent)] transition-colors"
+                                            className="text-body-md text-white/60 hover:text-[var(--color-accent)] transition-colors"
                                         >
                                             {link.label}
                                         </Link>
@@ -130,19 +130,19 @@ export function CTAFooterSection() {
                             animate={footerInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.3 }}
                         >
-                            <h4 className="text-lg mb-6">Stay Updated</h4>
+                            <h4 className="text-lg font-bold mb-6">Stay Updated</h4>
 
                             {/* Contact Info */}
-                            <div className="space-y-3 mb-8">
-                                <a href="tel:+966500000000" className="flex items-center gap-3 text-[rgba(255,255,255,0.6)] hover:text-[var(--color-accent)] transition-colors">
+                            <div className="space-y-4 mb-8">
+                                <a href="tel:+966500000000" className="flex items-center gap-3 text-body-md text-white/60 hover:text-[var(--color-accent)] transition-colors">
                                     <Phone className="w-5 h-5" />
                                     <span>+966 50 000 0000</span>
                                 </a>
-                                <a href="mailto:info@saudihorizon.com" className="flex items-center gap-3 text-[rgba(255,255,255,0.6)] hover:text-[var(--color-accent)] transition-colors">
+                                <a href="mailto:info@saudihorizon.com" className="flex items-center gap-3 text-body-md text-white/60 hover:text-[var(--color-accent)] transition-colors">
                                     <Mail className="w-5 h-5" />
                                     <span>info@saudihorizon.com</span>
                                 </a>
-                                <div className="flex items-start gap-3 text-[rgba(255,255,255,0.6)]">
+                                <div className="flex items-start gap-3 text-body-md text-white/60">
                                     <MapPin className="w-5 h-5 mt-0.5" />
                                     <span>Riyadh, Kingdom of Saudi Arabia</span>
                                 </div>
@@ -150,11 +150,11 @@ export function CTAFooterSection() {
 
                             {/* Newsletter */}
                             <div>
-                                <p className="text-[rgba(255,255,255,0.6)] text-sm mb-4">
+                                <p className="text-body-sm text-white/60 mb-4">
                                     Subscribe to our newsletter for the latest stock updates and industry news.
                                 </p>
                                 {subscribed ? (
-                                    <p className="text-[var(--color-accent)]">Thank you for subscribing!</p>
+                                    <p className="text-[var(--color-accent)] font-semibold">Thank you for subscribing!</p>
                                 ) : (
                                     <form onSubmit={handleSubscribe} className="flex">
                                         <input
@@ -162,12 +162,12 @@ export function CTAFooterSection() {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             placeholder="Your email"
-                                            className="flex-1 bg-white/5 border border-white/10 px-4 py-3 rounded-l-lg text-white placeholder:text-[rgba(255,255,255,0.3)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
+                                            className="flex-1 bg-white/5 border border-white/10 px-5 py-3.5 rounded-l-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-body-md"
                                             required
                                         />
                                         <button
                                             type="submit"
-                                            className="bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-4 py-3 rounded-r-lg font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
+                                            className="bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-5 py-3.5 rounded-r-lg font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
                                         >
                                             <ArrowRight className="w-5 h-5" />
                                         </button>
@@ -178,18 +178,18 @@ export function CTAFooterSection() {
                     </div>
 
                     {/* Bottom Bar */}
-                    <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-[rgba(255,255,255,0.4)] text-sm">
+                    <div className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p className="text-body-sm text-white/40">
                             © 2026 Saudi Horizon. All rights reserved.
                         </p>
-                        <div className="flex gap-6">
-                            <Link href="/privacy" className="text-[rgba(255,255,255,0.4)] text-sm hover:text-[var(--color-accent)] transition-colors">
+                        <div className="flex gap-8">
+                            <Link href="/privacy" className="text-body-sm text-white/40 hover:text-[var(--color-accent)] transition-colors">
                                 Privacy Policy
                             </Link>
-                            <Link href="/terms" className="text-[rgba(255,255,255,0.4)] text-sm hover:text-[var(--color-accent)] transition-colors">
+                            <Link href="/terms" className="text-body-sm text-white/40 hover:text-[var(--color-accent)] transition-colors">
                                 Terms of Service
                             </Link>
-                            <Link href="/sitemap" className="text-[rgba(255,255,255,0.4)] text-sm hover:text-[var(--color-accent)] transition-colors">
+                            <Link href="/sitemap" className="text-body-sm text-white/40 hover:text-[var(--color-accent)] transition-colors">
                                 Sitemap
                             </Link>
                         </div>
