@@ -1,6 +1,8 @@
 "use client";
 
 import { ShieldCheck, Atom, Globe, Truck, Award, Clock, Wrench, Headphones } from "lucide-react";
+import { motion, useInView, type Variants } from "framer-motion";
+import { useRef } from "react";
 
 const features = [
     {
@@ -23,8 +25,6 @@ const features = [
         title: 'Regional Distribution',
         description: 'Express delivery network across the Middle East with tracking',
     },
-    // Adding more features inline to match the grid layout if needed visually, 
-    // or keeping the existing 6-8 items.
     {
         icon: Award,
         title: '15+ Years Expertise',
@@ -47,66 +47,100 @@ const features = [
     },
 ];
 
+const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: {
+            delay: i * 0.1,
+            duration: 0.5,
+            ease: "easeOut"
+        }
+    })
+};
+
 export function WhyChooseSection() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
     return (
         <section className="py-32 bg-charcoal relative border-t border-white/5 overflow-hidden">
-            {/* Background accent */}
+            {/* Background accents */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold/5 to-transparent pointer-events-none" />
+            <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <motion.div
+                    ref={ref}
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                >
+                    <span className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4 block font-display">Why Choose Us</span>
+                    <h2 className="text-3xl md:text-5xl font-bold text-white font-display mb-6 leading-tight">
+                        Engineering Excellence &{" "}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-200">Unmatched Reliability</span>
+                    </h2>
+                    <p className="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">
+                        We don't just supply parts; we deliver peace of mind. Our rigorous quality standards and deep technical expertise ensure that your machinery operates at peak performance.
+                    </p>
+                </motion.div>
 
-                    {/* Left: Image / Visual */}
-                    <div className="relative group">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 to-charcoal rounded-sm blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                        <div className="relative aspect-square rounded-sm overflow-hidden bg-surface border border-white/5 shadow-2xl">
-                            <img
-                                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80"
-                                alt="Industrial Excellence"
-                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent"></div>
-
-                            {/* Floating Stats Card */}
-                            <div className="absolute bottom-6 left-6 right-6 glass p-6 border-l-4 border-gold">
-                                <div className="flex items-center gap-4">
-                                    <div className="bg-gold/10 p-3 rounded-full backdrop-blur-md">
-                                        <Award className="w-8 h-8 text-gold" />
-                                    </div>
-                                    <div>
-                                        <p className="text-3xl font-bold text-white font-display">1000+</p>
-                                        <p className="text-xs text-slate-300 uppercase tracking-widest font-medium">Satisfied Clients</p>
-                                    </div>
-                                </div>
+                {/* Modern Bento Grid - 4 columns on large screens */}
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
+                    }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                >
+                    {features.map((feature, index) => (
+                        <motion.div
+                            key={index}
+                            variants={cardVariants}
+                            custom={index}
+                            className={`group relative p-6 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-gold/40 hover:bg-white/[0.05] transition-all duration-500 overflow-hidden ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''
+                                }`}
+                        >
+                            {/* Animated gradient background */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-transparent" />
                             </div>
-                        </div>
-                    </div>
 
-                    {/* Right: Content */}
-                    <div>
-                        <span className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4 block font-display">Why Choose Us</span>
-                        <h2 className="text-3xl md:text-5xl font-bold text-white font-display mb-8 leading-tight">
-                            Engineering Excellence & <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-200">Unmatched Reliability</span>
-                        </h2>
-                        <p className="text-slate-300 text-lg mb-12 leading-relaxed">
-                            We don't just supply parts; we deliver peace of mind. Our rigorous quality standards and deep technical expertise ensure that your machinery operates at peak performance, minimizing downtime and maximizing ROI.
-                        </p>
+                            {/* Corner accents */}
+                            <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                <div className="absolute top-2 right-2 w-8 h-8 border-t border-r border-gold/30 rounded-tr-lg" />
+                            </div>
 
-                        <div className="grid sm:grid-cols-2 gap-x-8 gap-y-10">
-                            {features.map((feature, index) => (
-                                <div key={index} className="group">
-                                    <div className="mb-4 inline-flex items-center justify-center w-12 h-12 bg-white/5 rounded-lg group-hover:bg-gold/20 transition-colors duration-300 border border-white/10 group-hover:border-gold/30">
-                                        <feature.icon className="w-6 h-6 text-gold transition-transform group-hover:scale-110" />
-                                    </div>
-                                    <h4 className="text-white font-bold mb-2 font-display text-lg group-hover:text-gold transition-colors">{feature.title}</h4>
-                                    <p className="text-slate-300 text-sm leading-relaxed">{feature.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                            <div className="relative z-10">
+                                <motion.div
+                                    className="mb-4 inline-flex items-center justify-center w-14 h-14 bg-white/5 rounded-xl group-hover:bg-gold/20 transition-colors duration-300 border border-white/10 group-hover:border-gold/50"
+                                    whileHover={{ scale: 1.05, rotate: 5 }}
+                                >
+                                    <feature.icon className="w-7 h-7 text-gold transition-transform group-hover:scale-110" />
+                                </motion.div>
+                                <h4 className="text-white font-bold mb-2 font-display text-lg group-hover:text-gold transition-colors duration-300">{feature.title}</h4>
+                                <p className="text-slate-300 text-sm leading-relaxed group-hover:text-slate-200 transition-colors duration-300">
+                                    {feature.description}
+                                </p>
+                            </div>
 
-                </div>
+                            {/* Bottom line indicator */}
+                            <motion.div
+                                className="absolute bottom-0 left-0 h-0.5 bg-gold"
+                                initial={{ width: 0 }}
+                                whileInView={{ width: '100%' }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.5 + index * 0.1, duration: 0.8 }}
+                            />
+                        </motion.div>
+                    ))}
+                </motion.div>
             </div>
         </section>
     );

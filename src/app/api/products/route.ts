@@ -61,3 +61,27 @@ export async function GET(request: NextRequest) {
         );
     }
 }
+
+export async function POST(request: NextRequest) {
+    try {
+        await connectDB();
+
+        const body = await request.json();
+        const products = Array.isArray(body) ? body : [body];
+
+        // Insert multiple products
+        const inserted = await Product.insertMany(products, { ordered: false });
+
+        return NextResponse.json({
+            success: true,
+            count: inserted.length,
+            products: inserted
+        });
+    } catch (error: unknown) {
+        console.error('Error creating products:', error);
+        return NextResponse.json(
+            { error: 'Failed to create products' },
+            { status: 500 }
+        );
+    }
+}
