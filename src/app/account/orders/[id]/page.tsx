@@ -74,11 +74,13 @@ export default function OrderDetailsPage() {
 
     // Handle Download Invoice
     const handleDownloadInvoice = () => {
+        if (!order) return;
+        const invoiceDate = order.createdAt ? formatDate(order.createdAt) : 'N/A';
         const invoiceHTML = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Invoice - ${order.id}</title>
+    <title>Invoice - ${order._id}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Helvetica Neue', Arial, sans-serif; padding: 40px; color: #333; }
@@ -115,9 +117,9 @@ export default function OrderDetailsPage() {
             </div>
             <div class="invoice-info">
                 <div class="invoice-title">INVOICE</div>
-                <p><span class="label">Invoice #:</span> INV-${order.id}</p>
-                <p><span class="label">Order #:</span> ${order.id}</p>
-                <p><span class="label">Date:</span> ${order.date}</p>
+                <p><span class="label">Invoice #:</span> INV-${order._id}</p>
+                <p><span class="label">Order #:</span> ${order._id}</p>
+                <p><span class="label">Date:</span> ${formatDate(order.createdAt)}</p>
                 <p><span class="label">Status:</span> ${order.status}</p>
             </div>
         </div>
@@ -125,10 +127,10 @@ export default function OrderDetailsPage() {
         <div class="section">
             <div class="section-title">Bill To</div>
             <div class="address">
-                <strong>${order.billingAddress.name}</strong><br>
-                ${order.billingAddress.street}<br>
-                ${order.billingAddress.city}, ${order.billingAddress.state} ${order.billingAddress.zip}<br>
-                ${order.billingAddress.country}
+                <strong>${order.shippingAddress?.name || 'Customer'}</strong><br>
+                ${order.shippingAddress?.street1 || ''}<br>
+                ${order.shippingAddress?.city || ''}, ${order.shippingAddress?.state || ''} ${order.shippingAddress?.zip || ''}<br>
+                ${order.shippingAddress?.country || ''}
             </div>
         </div>
 
@@ -146,10 +148,10 @@ export default function OrderDetailsPage() {
                 <tbody>
                     ${order.items.map(item => `
                     <tr>
-                        <td>${item.name}</td>
+                        <td>${item.product?.name || 'Product'}</td>
                         <td class="text-right">${item.quantity}</td>
-                        <td class="text-right">${item.price.toLocaleString()}</td>
-                        <td class="text-right">${(item.quantity * item.price).toLocaleString()}</td>
+                        <td class="text-right">${(item.price || 0).toLocaleString()}</td>
+                        <td class="text-right">${((item.quantity || 0) * (item.price || 0)).toLocaleString()}</td>
                     </tr>
                     `).join('')}
                 </tbody>
@@ -160,19 +162,19 @@ export default function OrderDetailsPage() {
             <div class="totals">
                 <div class="totals-row">
                     <span>Subtotal</span>
-                    <span>${order.subtotal.toLocaleString()}</span>
+                    <span>$${calculateSubtotal().toLocaleString()}</span>
                 </div>
                 <div class="totals-row">
                     <span>Shipping</span>
-                    <span>${order.shipping.toLocaleString()}</span>
+                    <span>$${(0).toLocaleString()}</span>
                 </div>
                 <div class="totals-row">
                     <span>Tax</span>
-                    <span>${order.tax.toLocaleString()}</span>
+                    <span>$${(0).toLocaleString()}</span>
                 </div>
                 <div class="totals-row total">
                     <span>Total</span>
-                    <span>${order.total.toLocaleString()}</span>
+                    <span>$${order.totalAmount.toLocaleString()}</span>
                 </div>
             </div>
         </div>
@@ -265,6 +267,28 @@ export default function OrderDetailsPage() {
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading order details...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !order) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-destructive mb-4">{error || 'Order not found'}</p>
+                    <Button onClick={() => router.push('/account/orders')}>Back to Orders</Button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-background py-8">
             <div className="max-w-6xl mx-auto px-4">
@@ -280,7 +304,7 @@ export default function OrderDetailsPage() {
                             <BreadcrumbLink onClick={() => router.push('/account/orders')}>Orders</BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
-                        <BreadcrumbPage>{order.id}</BreadcrumbPage>
+                        <BreadcrumbPage>{order?._id}</BreadcrumbPage>
                     </BreadcrumbList>
                 </Breadcrumb>
 
@@ -289,12 +313,12 @@ export default function OrderDetailsPage() {
                         <Button variant="ghost" size="icon" onClick={() => router.push('/account/orders')}>
                             <ArrowLeft className="w-5 h-5" />
                         </Button>
-                        <h1 className="text-3xl font-bold">Order {order.id}</h1>
+                        <h1 className="text-3xl font-bold">Order {order?._id}</h1>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className={`flex items-center gap-2 font-medium ${getStatusColor(order.status)}`}>
-                            {getStatusIcon(order.status)}
-                            {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace('_', ' ')}
+                        <span className={`flex items-center gap-2 font-medium ${getStatusColor(order?.status || '')}`}>
+                            {getStatusIcon(order?.status || '')}
+                            {(order?.status || '').charAt(0).toUpperCase() + (order?.status || '').slice(1).replace('_', ' ')}
                         </span>
                     </div>
                 </div>
@@ -308,17 +332,17 @@ export default function OrderDetailsPage() {
                                 <CardTitle>Order Items</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {order.items.map((item) => (
-                                    <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
+                                {order?.items.map((item: any) => (
+                                    <div key={item._id || Math.random()} className="flex gap-4 p-4 border rounded-lg">
                                         <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                                             <img
-                                                src={item.image}
-                                                alt={item.name}
+                                                src={item.product?.image || '/images/category_hydraulics.jpg'}
+                                                alt={item.product?.name || 'Product'}
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-semibold">{item.name}</h3>
+                                            <h3 className="font-semibold">{item.product?.name || 'Product'}</h3>
                                             <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                                             <p className="font-medium mt-2">${(item.price * item.quantity).toLocaleString()}</p>
                                         </div>
@@ -330,26 +354,19 @@ export default function OrderDetailsPage() {
                         {/* Order Timeline */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Order Timeline</CardTitle>
+                                <CardTitle>Order Status</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="relative">
-                                    {order.timeline.map((event, index) => (
-                                        <div key={event.status} className="flex gap-4 pb-8 last:pb-0">
-                                            <div className="flex flex-col items-center">
-                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${getStatusColor(event.status)} bg-current/10`}>
-                                                    {getStatusIcon(event.status)}
-                                                </div>
-                                                {index < order.timeline.length - 1 && (
-                                                    <div className="w-0.5 h-full bg-gray-200 absolute top-10" />
-                                                )}
-                                            </div>
-                                            <div className="flex-1">
-                                                <p className="font-medium">{event.description}</p>
-                                                <p className="text-sm text-muted-foreground">{event.date}</p>
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                                    {getStatusIcon(order?.status || '')}
+                                    <div>
+                                        <p className={`font-medium ${getStatusColor(order?.status || '')}`}>
+                                            {(order?.status || '').charAt(0).toUpperCase() + (order?.status || '').slice(1).replace('_', ' ')}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Placed on {order?.createdAt ? formatDate(order.createdAt) : 'N/A'}
+                                        </p>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
@@ -365,19 +382,19 @@ export default function OrderDetailsPage() {
                             <CardContent className="space-y-3">
                                 <div className="flex justify-between">
                                     <span className="text-muted-foreground">Subtotal</span>
-                                    <span>${order.subtotal.toLocaleString()}</span>
+                                    <span>${calculateSubtotal().toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-muted-foreground">Shipping</span>
-                                    <span>${order.shipping.toLocaleString()}</span>
+                                    <span>${(0).toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-muted-foreground">Tax</span>
-                                    <span>${order.tax.toLocaleString()}</span>
+                                    <span>${(0).toLocaleString()}</span>
                                 </div>
                                 <div className="border-t pt-3 flex justify-between font-semibold text-lg">
                                     <span>Total</span>
-                                    <span>${order.total.toLocaleString()}</span>
+                                    <span>${(order?.totalAmount || 0).toLocaleString()}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -391,12 +408,12 @@ export default function OrderDetailsPage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="font-medium">{order.shippingAddress.name}</p>
-                                <p className="text-muted-foreground">{order.shippingAddress.street}</p>
+                                <p className="font-medium">{order?.shippingAddress?.name || 'N/A'}</p>
+                                <p className="text-muted-foreground">{order?.shippingAddress?.street1 || 'N/A'}</p>
                                 <p className="text-muted-foreground">
-                                    {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}
+                                    {order?.shippingAddress?.city || 'N/A'}, {order?.shippingAddress?.state || 'N/A'} {order?.shippingAddress?.zip || 'N/A'}
                                 </p>
-                                <p className="text-muted-foreground">{order.shippingAddress.country}</p>
+                                <p className="text-muted-foreground">{order?.shippingAddress?.country || 'N/A'}</p>
                             </CardContent>
                         </Card>
 
@@ -409,7 +426,7 @@ export default function OrderDetailsPage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="font-medium">{order.paymentMethod.type} •••• {order.paymentMethod.last4}</p>
+                                <p className="font-medium">Payment: {order?.shippingAddress?.email || 'N/A'}</p>
                             </CardContent>
                         </Card>
 
