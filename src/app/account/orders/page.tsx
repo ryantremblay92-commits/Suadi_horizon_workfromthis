@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Package, ChevronRight, MapPin, Clock, CheckCircle } from 'lucide-react';
@@ -9,36 +9,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { useAuth } from '@/contexts/AuthContext';
+import { getOrders, Order } from '@/api/user';
 
-// Mock orders data
-const orders = [
-    {
-        id: 'SH-12345678',
-        date: '2024-01-15',
-        status: 'delivered',
-        total: 1250,
-        items: [
-            { name: 'Caterpillar Engine Oil Filter', quantity: 2, price: 25 },
-            { name: 'Hydraulic Pump Assembly', quantity: 1, price: 450 },
-            { name: 'Turbocharger Kit', quantity: 1, price: 750 },
-        ],
-        tracking: 'TRK123456789',
-        estimatedDelivery: '2024-01-20',
-        deliveredDate: '2024-01-18',
-    },
-    {
-        id: 'SH-23456789',
-        date: '2024-01-20',
-        status: 'shipped',
-        total: 780,
-        items: [
-            { name: 'Air Filter Set', quantity: 3, price: 45 },
-            { name: 'Fuel Injection Pump', quantity: 1, price: 645 },
-        ],
-        tracking: 'TRK987654321',
-        estimatedDelivery: '2024-01-25',
-    },
-];
+// Initial empty state - will be fetched from API
+const initialOrders: Order[] = [];
 
 const statusColors: Record<string, string> = {
     pending: 'bg-yellow-500',
@@ -50,15 +24,34 @@ const statusColors: Record<string, string> = {
 
 export default function OrdersPage() {
     const router = useRouter();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isInitialized } = useAuth();
+    const [orders, setOrders] = useState<Order[]>(initialOrders);
+    const [isLoading, setIsLoading] = useState(true);
 
     React.useEffect(() => {
-        if (!isAuthenticated) {
+        if (isInitialized && !isAuthenticated) {
             router.push('/login?redirect=/account/orders');
         }
-    }, [isAuthenticated, router]);
+    }, [isAuthenticated, isInitialized, router]);
 
-    if (!isAuthenticated) {
+    // Fetch orders from API
+    useEffect(() => {
+        const fetchOrders = async () => {
+            if (isAuthenticated) {
+                try {
+                    const data = await getOrders();
+                    setOrders(data);
+                } catch (error) {
+                    console.error('Error fetching orders:', error);
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        };
+        fetchOrders();
+    }, [isAuthenticated]);
+
+    if (!isInitialized || !isAuthenticated) {
         return null;
     }
 
@@ -82,9 +75,9 @@ export default function OrdersPage() {
                 <h1 className="text-3xl font-bold mb-8">My Orders</h1>
 
                 <div className="space-y-6">
-                    {orders.map((order, index) => (
+                    {orders.map((order: Order, index: number) => (
                         <motion.div
-                            key={order.id}
+                            key={order._id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
@@ -97,57 +90,53 @@ export default function OrdersPage() {
                                             <div className="flex items-center gap-3">
                                                 <h3
                                                     className="font-semibold text-lg cursor-pointer hover:text-primary transition-colors"
-                                                    onClick={() => router.push(`/account/orders/${order.id}`)}
+                                                    onClick={() => router.push(`/account/orders/${order._id}`)}
                                                 >
-                                                    {order.id}
+                                                    {order._id}
                                                 </h3>
                                                 <Badge className={`${statusColors[order.status]} text-white`}>
                                                     {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                                                 </Badge>
                                             </div>
-                                            <p className="text-sm text-muted-foreground">Placed on {order.date}</p>
+                                            <p className="text-sm text-muted-foreground">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-bold text-xl">KWD {order.total.toFixed(2)}</p>
+                                            <p className="font-bold text-xl">KWD {order.totalAmount.toFixed(2)}</p>
                                             <p className="text-sm text-muted-foreground">{order.items.length} items</p>
                                         </div>
                                     </div>
 
                                     {/* Order Items */}
                                     <div className="space-y-3 mb-4">
-                                        {order.items.map((item, idx) => (
+                                        {order.items.map((item: any, idx: number) => (
                                             <div key={idx} className="flex justify-between text-sm">
-                                                <span>{item.name} × {item.quantity}</span>
-                                                <span className="text-muted-foreground">KWD {(item.price * item.quantity).toFixed(2)}</span>
+                                                <span>{item.product?.name || 'Product'} × {item.quantity}</span>
+                                                <span className="text-muted-foreground">KWD {(item.product?.price || 0 * item.quantity).toFixed(2)}</span>
                                             </div>
                                         ))}
                                     </div>
 
                                     {/* Tracking Info */}
-                                    {order.tracking && (
-                                        <div className="bg-muted/50 rounded-lg p-3 mb-4">
-                                            <div className="flex items-center gap-2 text-sm">
-                                                <Package className="w-4 h-4 text-primary" />
-                                                <span className="font-medium">Tracking: {order.tracking}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-sm mt-2">
-                                                <Clock className="w-4 h-4 text-muted-foreground" />
-                                                <span className="text-muted-foreground">
-                                                    {order.status === 'delivered'
-                                                        ? `Delivered on ${order.deliveredDate}`
-                                                        : `Estimated delivery: ${order.estimatedDelivery}`
-                                                    }
-                                                </span>
-                                            </div>
+                                    {/* Tracking - simplified for real API */}
+                                    <div className="bg-muted/50 rounded-lg p-3 mb-4">
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <Package className="w-4 h-4 text-primary" />
+                                            <span className="font-medium">Status: {order.status}</span>
                                         </div>
-                                    )}
+                                        <div className="flex items-center gap-2 text-sm mt-2">
+                                            <Clock className="w-4 h-4 text-muted-foreground" />
+                                            <span className="text-muted-foreground">
+                                                Ordered on {new Date(order.createdAt).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    </div>
 
                                     {/* Actions */}
                                     <div className="flex gap-3">
-                                        <Button variant="outline" size="sm" onClick={() => router.push(`/account/orders/${order.id}`)}>
+                                        <Button variant="outline" size="sm" onClick={() => router.push(`/account/orders/${order._id}`)}>
                                             Track Order
                                         </Button>
-                                        <Button variant="outline" size="sm" onClick={() => router.push(`/account/orders/${order.id}`)}>
+                                        <Button variant="outline" size="sm" onClick={() => router.push(`/account/orders/${order._id}`)}>
                                             View Details
                                         </Button>
                                         {order.status === 'delivered' && (

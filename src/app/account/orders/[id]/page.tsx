@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Package, MapPin, CreditCard, Bell, ArrowLeft, Truck, CheckCircle, Clock, Package as PackageIcon, XCircle, FileText, RotateCcw, MessageCircle } from 'lucide-react';
@@ -8,94 +8,69 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { useAuth } from '@/contexts/AuthContext';
+import { getOrderById, Order } from '@/api/user';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
-// Mock order data
-const mockOrder = {
-    id: 'ORD-2024-001',
-    date: '2024-01-15',
-    status: 'delivered',
-    items: [
-        {
-            id: '1',
-            name: 'CAT 320 Hydraulic Excavator',
-            price: 185000,
-            quantity: 1,
-            image: '/images/category_hydraulics.jpg',
-        },
-        {
-            id: '2',
-            name: 'Bucket Attachment - 24"',
-            price: 2500,
-            quantity: 2,
-            image: '/images/category_attachments.jpg',
-        },
-    ],
-    shippingAddress: {
-        name: 'John Doe',
-        street: '123 Construction Ave',
-        city: 'Riyadh',
-        state: 'Central Province',
-        zip: '12345',
-        country: 'Saudi Arabia',
-    },
-    billingAddress: {
-        name: 'John Doe',
-        street: '123 Construction Ave',
-        city: 'Riyadh',
-        state: 'Central Province',
-        zip: '12345',
-        country: 'Saudi Arabia',
-    },
-    paymentMethod: {
-        type: 'Visa',
-        last4: '4242',
-    },
-    subtotal: 190000,
-    shipping: 2500,
-    tax: 19000,
-    total: 211500,
-    timeline: [
-        {
-            status: 'ordered',
-            date: '2024-01-15 10:30',
-            description: 'Order placed',
-        },
-        {
-            status: 'processing',
-            date: '2024-01-16 09:00',
-            description: 'Order being processed',
-        },
-        {
-            status: 'shipped',
-            date: '2024-01-18 14:00',
-            description: 'Shipped via freight',
-        },
-        {
-            status: 'out_for_delivery',
-            date: '2024-01-22 08:00',
-            description: 'Out for delivery',
-        },
-        {
-            status: 'delivered',
-            date: '2024-01-22 16:30',
-            description: 'Delivered',
-        },
-    ],
-};
-
 export default function OrderDetailsPage() {
     const router = useRouter();
     const params = useParams();
     const { isAuthenticated, user, isInitialized } = useAuth();
-    const [order] = useState(mockOrder);
+    const [order, setOrder] = useState<Order | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [showReturnDialog, setShowReturnDialog] = useState(false);
     const [showSupportDialog, setShowSupportDialog] = useState(false);
     const [returnReason, setReturnReason] = useState('');
     const [supportMessage, setSupportMessage] = useState('');
+
+    // Calculate subtotal from items
+    const calculateSubtotal = () => {
+        if (!order) return 0;
+        return order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    };
+
+    // Format date
+    const formatDate = (dateString: string) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    // Fetch order from API
+    useEffect(() => {
+        const fetchOrder = async () => {
+            if (!isInitialized) return;
+            if (!isAuthenticated) {
+                router.push('/login?redirect=/account/orders');
+                return;
+            }
+
+            const orderId = params.id;
+            if (!orderId) {
+                setError('Order ID not found');
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+                const data = await getOrderById(orderId as string);
+                setOrder(data);
+            } catch (err) {
+                console.error('Error fetching order:', err);
+                setError('Failed to load order details');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchOrder();
+    }, [isInitialized, isAuthenticated, router, params.id]);
 
     // Handle Download Invoice
     const handleDownloadInvoice = () => {

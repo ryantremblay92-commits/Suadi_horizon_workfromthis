@@ -46,6 +46,24 @@ export interface UserProfile {
     createdAt: string;
 }
 
+// Order types
+export interface OrderItem {
+    product: any;
+    quantity: number;
+    price: number;
+}
+
+export interface Order {
+    _id: string;
+    user: string;
+    items: OrderItem[];
+    totalAmount: number;
+    shippingAddress: any;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 // Helper function to extract error message
 const getErrorMessage = (error: unknown): string => {
     if (error instanceof AxiosError) {
@@ -166,6 +184,27 @@ export const updateUserProfile = async (profile: { name?: string; phone?: string
         return response.data;
     } catch (error) {
         console.error('Error updating user profile:', error);
+        throw new Error(getErrorMessage(error));
+    }
+};
+
+// Orders API functions
+export const getOrders = async (): Promise<Order[]> => {
+    try {
+        const response = await api.get('/api/orders');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        throw new Error(getErrorMessage(error));
+    }
+};
+
+export const getOrderById = async (id: string): Promise<Order> => {
+    try {
+        const response = await api.get(`/api/orders/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching order:', error);
         throw new Error(getErrorMessage(error));
     }
 };

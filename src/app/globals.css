@@ -1,4 +1,5 @@
-@import "tailwindcss";
+@import "../../tailwind.css";
+@plugin "tailwindcss-animate";
 
 /* =========================================
    BASE STYLES & RESET
