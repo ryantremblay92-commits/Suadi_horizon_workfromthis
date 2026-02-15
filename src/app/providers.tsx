@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ChatProvider } from "@/contexts/ChatContext";
 import { ComparisonProvider } from "@/contexts/ComparisonContext";
+import { WishlistProvider } from "@/contexts/WishlistContext";
 import ChatWidget from "@/components/ChatWidget";
 import { useEffect, useState } from "react";
 
@@ -38,15 +39,17 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
     return (
         <ComparisonProvider>
-            <AuthProvider>
-                <ChatProvider>
-                    <ThemeProvider defaultTheme="light" storageKey="ui-theme">
-                        {children}
-                        <Toaster />
-                        <ChatWidget />
-                    </ThemeProvider>
-                </ChatProvider>
-            </AuthProvider>
+            <WishlistProvider>
+                <AuthProvider>
+                    <ChatProvider>
+                        <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+                            {children}
+                            <Toaster />
+                            <ChatWidget />
+                        </ThemeProvider>
+                    </ChatProvider>
+                </AuthProvider>
+            </WishlistProvider>
         </ComparisonProvider>
     );
 }

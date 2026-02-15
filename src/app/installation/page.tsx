@@ -67,9 +67,9 @@ export default function InstallationPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-6xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem><BreadcrumbLink onClick={() => router.push('/')}>Home</BreadcrumbLink></BreadcrumbItem>
                         <BreadcrumbSeparator />
@@ -78,11 +78,11 @@ export default function InstallationPage() {
                 </Breadcrumb>
 
                 <motion.div className="mb-12 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-                    <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Wrench className="w-10 h-10 text-yellow-500" />
+                    <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Wrench className="w-10 h-10 text-gold" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-white">Equipment Installation Services</h1>
-                    <p className="text-xl text-gray-300">Professional installation by certified technicians across Saudi Arabia</p>
+                    <h1 className="heading-lg mb-4">Equipment Installation <span className="text-gradient-gold">Services</span></h1>
+                    <p className="text-xl text-white/70">Professional installation by certified technicians across Saudi Arabia</p>
                 </motion.div>
 
                 <div className="grid lg:grid-cols-3 gap-8 mb-12">
@@ -92,16 +92,16 @@ export default function InstallationPage() {
                         { icon: CheckCircle, title: 'Certification', items: ['ISO 9001 Certified', 'Manufacturer Approved', '2-Year Warranty', '24/7 Support'] },
                     ].map((feature, i) => (
                         <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}>
-                            <Card className="bg-gray-800 border-gray-700 h-full">
+                            <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300 h-full">
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-3 text-white">
-                                        <feature.icon className="w-6 h-6 text-yellow-500" />{feature.title}
+                                        <feature.icon className="w-6 h-6 text-gold" />{feature.title}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-2">
                                     {feature.items.map((item, j) => (
-                                        <div key={j} className="flex items-center gap-2 text-gray-300">
-                                            <CheckCircle className="w-4 h-4 text-yellow-500" />{item}
+                                        <div key={j} className="flex items-center gap-2 text-white/70">
+                                            <CheckCircle className="w-4 h-4 text-gold" />{item}
                                         </div>
                                     ))}
                                 </CardContent>
@@ -111,61 +111,54 @@ export default function InstallationPage() {
                 </div>
 
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Card className="bg-gray-800 border-gray-700">
+                    <Card className="bg-white/5 border-white/10">
                         <CardHeader>
-                            <CardTitle className="text-white text-center text-2xl">Request Installation Service</CardTitle>
+                            <CardTitle className="text-white text-center text-2xl font-semibold">Request Installation Service</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name" className="text-gray-300">Full Name *</Label>
-                                    <Input id="name" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} className="bg-gray-700 border-gray-600 text-white" placeholder="Your name" required />
+                                    <Label htmlFor="name" className="text-white/80">Full Name *</Label>
+                                    <Input id="name" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} className="bg-white/5 border-white/10 text-white" placeholder="Your name" required />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="phone" className="text-gray-300">Phone Number *</Label>
-                                    <Input id="phone" value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} className="bg-gray-700 border-gray-600 text-white" placeholder="05XXXXXXXX" required />
+                                    <Label htmlFor="phone" className="text-white/80">Phone Number *</Label>
+                                    <Input id="phone" value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} className="bg-white/5 border-white/10 text-white" placeholder="05XXXXXXXX" required />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="email" className="text-gray-300">Email</Label>
-                                    <Input id="email" type="email" value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)} className="bg-gray-700 border-gray-600 text-white" placeholder="email@example.com" />
+                                    <Label htmlFor="email" className="text-white/80">Email</Label>
+                                    <Input id="email" type="email" value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)} className="bg-white/5 border-white/10 text-white" placeholder="email@example.com" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="company" className="text-gray-300">Company Name</Label>
-                                    <Input id="company" value={formData.company} onChange={(e) => handleInputChange('company', e.target.value)} className="bg-gray-700 border-gray-600 text-white" placeholder="Company name" />
+                                    <Label htmlFor="company" className="text-white/80">Company Name</Label>
+                                    <Input id="company" value={formData.company} onChange={(e) => handleInputChange('company', e.target.value)} className="bg-white/5 border-white/10 text-white" placeholder="Company name" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">Equipment Type *</Label>
+                                    <Label className="text-white/80">Equipment Type *</Label>
                                     <Select value={formData.equipmentType} onValueChange={(v) => handleInputChange('equipmentType', v)}>
-                                        <SelectTrigger className="bg-gray-700 border-gray-600 text-white"><SelectValue placeholder="Select equipment type" /></SelectTrigger>
+                                        <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue placeholder="Select equipment type" /></SelectTrigger>
                                         <SelectContent>{equipmentTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="preferredDate" className="text-gray-300">Preferred Date</Label>
-                                    <Input id="preferredDate" type="date" value={formData.preferredDate} onChange={(e) => handleInputChange('preferredDate', e.target.value)} className="bg-gray-700 border-gray-600 text-white" />
+                                    <Label htmlFor="preferredDate" className="text-white/80">Preferred Date</Label>
+                                    <Input id="preferredDate" type="date" value={formData.preferredDate} onChange={(e) => handleInputChange('preferredDate', e.target.value)} className="bg-white/5 border-white/10 text-white" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">City *</Label>
+                                    <Label className="text-white/80">City *</Label>
                                     <Select value={formData.city} onValueChange={(v) => { handleInputChange('city', v); handleInputChange('region', ''); }}>
-                                        <SelectTrigger className="bg-gray-700 border-gray-600 text-white"><SelectValue placeholder="Select city" /></SelectTrigger>
-                                        <SelectContent>{serviceAreas.map(a => <SelectItem key={a.city} value={a.city}>{a.city}</SelectItem>)}</SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label className="text-gray-300">Region/Area</Label>
-                                    <Select value={formData.region} onValueChange={(v) => handleInputChange('region', v)} disabled={!formData.city}>
-                                        <SelectTrigger className="bg-gray-700 border-gray-600 text-white"><SelectValue placeholder="Select region" /></SelectTrigger>
+                                        <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue placeholder="Select region" /></SelectTrigger>
                                         <SelectContent>
                                             {serviceAreas.find(a => a.city === formData.city)?.regions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 <div className="md:col-span-2 space-y-2">
-                                    <Label htmlFor="notes" className="text-gray-300">Additional Notes</Label>
-                                    <Textarea id="notes" value={formData.notes} onChange={(e) => handleInputChange('notes', e.target.value)} className="bg-gray-700 border-gray-600 text-white" placeholder="Describe your installation requirements..." />
+                                    <Label htmlFor="notes" className="text-white/80">Additional Notes</Label>
+                                    <Textarea id="notes" value={formData.notes} onChange={(e) => handleInputChange('notes', e.target.value)} className="bg-white/5 border-white/10 text-white" placeholder="Describe your installation requirements..." />
                                 </div>
                                 <div className="md:col-span-2">
-                                    <Button type="submit" disabled={isSubmitting} className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3">
+                                    <Button type="submit" disabled={isSubmitting} className="w-full btn-primary py-3">
                                         {isSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Submitting...</> : 'Submit Installation Request'}
                                     </Button>
                                 </div>
@@ -174,11 +167,11 @@ export default function InstallationPage() {
                     </Card>
                 </motion.div>
 
-                <motion.div className="mt-12 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-500/30 rounded-lg p-8 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Phone className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold mb-4 text-white">Need Immediate Assistance?</h2>
-                    <p className="text-gray-300 mb-6">Our installation team is available Sunday through Thursday, 8AM to 6PM</p>
-                    <Button onClick={() => router.push('/contact')} className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold">Contact Installation Team</Button>
+                <motion.div className="mt-12 bg-gradient-to-r from-gold/20 to-transparent border border-gold/30 rounded-2xl p-8 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <Phone className="w-12 h-12 text-gold mx-auto mb-4" />
+                    <h2 className="heading-md mb-4">Need Immediate <span className="text-gradient-gold">Assistance?</span></h2>
+                    <p className="text-white/60 mb-6">Our installation team is available Sunday through Thursday, 8AM to 6PM</p>
+                    <Button onClick={() => router.push('/contact')} className="btn-primary">Contact Installation Team</Button>
                 </motion.div>
             </div>
         </div>

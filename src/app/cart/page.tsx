@@ -49,11 +49,11 @@ export default function CartPage() {
 
     if (!mounted) {
         return (
-            <div className="min-h-screen bg-background text-white py-8">
-                <div className="max-w-6xl mx-auto px-4">
+            <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+                <div className="container mx-auto px-4">
                     <div className="animate-pulse space-y-4">
-                        <div className="h-8 bg-gray-800 rounded w-1/4"></div>
-                        <div className="h-64 bg-gray-800 rounded"></div>
+                        <div className="h-8 bg-white/10 rounded w-1/4"></div>
+                        <div className="h-64 bg-white/10 rounded"></div>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@ export default function CartPage() {
                                             <img
                                                 src={item.image}
                                                 alt={item.name}
-                                                className="w-24 h-24 object-cover rounded bg-gray-800"
+                                                className="w-24 h-24 object-cover rounded bg-white/10"
                                             />
                                             <div className="flex-1">
                                                 <div className="flex justify-between items-start">
@@ -138,7 +138,7 @@ export default function CartPage() {
                                 <Button
                                     variant="outline"
                                     onClick={handleClearCart}
-                                    className="border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800"
+                                    className="border-white/20 text-white/60 hover:text-white hover:bg-white/10"
                                 >
                                     <Trash2 className="h-4 w-4 mr-2" />
                                     Clear Cart
@@ -174,7 +174,7 @@ export default function CartPage() {
                                     </Button>
                                     <Button
                                         variant="outline"
-                                        className="w-full mt-3 border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800"
+                                        className="w-full mt-3 border-white/20 text-white/60 hover:text-white hover:bg-white/10"
                                         onClick={() => router.push('/products')}
                                     >
                                         <ShoppingCart className="mr-2 h-4 w-4" />

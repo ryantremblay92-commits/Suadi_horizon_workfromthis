@@ -1,30 +1,36 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/lib/db/models/User';
-import bcrypt from 'bcrypt';
 
-export async function GET() {
+export async function POST() {
     try {
         await connectDB();
 
         const adminEmail = 'admin@example.com';
-        const adminPassword = 'admin'; // Simple password for development
+        const adminPassword = 'admin';
 
         // Check if admin already exists
         const existingAdmin = await User.findOne({ email: adminEmail });
         if (existingAdmin) {
             // Update role to admin just in case
             existingAdmin.role = 'admin';
+            if (!existingAdmin.profile) {
+                existingAdmin.profile = { name: 'Administrator' };
+            } else if (!existingAdmin.profile.name) {
+                existingAdmin.profile.name = 'Administrator';
+            }
             await existingAdmin.save();
             return NextResponse.json({ message: 'Admin user updated', email: adminEmail });
         }
 
         // Create new admin user
-        // Note: The pre-save hook in User model handles password hashing
         const newAdmin = new User({
             email: adminEmail,
             password: adminPassword,
             role: 'admin',
+            profile: {
+                name: 'Administrator',
+            },
         });
 
         await newAdmin.save();
@@ -37,9 +43,8 @@ export async function GET() {
 
     } catch (error: any) {
         console.error('Error creating admin user:', error);
-        return NextResponse.json(
-            { error: error.message || 'Failed to create admin user' },
-            { status: 500 }
-        );
+        return NextResponse.json({
+            error: error.message || 'Failed to create admin user'
+        }, { status: 500 });
     }
 }

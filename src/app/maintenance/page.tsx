@@ -76,8 +76,8 @@ export default function MaintenancePage() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-6xl mx-auto px-4">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
                 <Breadcrumb className="mb-8">
                     <BreadcrumbList>
                         <BreadcrumbItem>
@@ -96,11 +96,11 @@ export default function MaintenancePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Wrench className="w-10 h-10 text-yellow-500" />
+                    <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Wrench className="w-10 h-10 text-gold" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-white">Preventive Maintenance Services</h1>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    <h1 className="heading-lg mb-4">Preventive Maintenance <span className="text-gradient-gold">Services</span></h1>
+                    <p className="text-xl text-white/70 max-w-3xl mx-auto">
                         Extend the life of your equipment with our comprehensive maintenance programs.
                         Scheduled service contracts available throughout Saudi Arabia.
                     </p>
@@ -113,32 +113,32 @@ export default function MaintenancePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                    <Card className="bg-gray-800 border-gray-700">
+                    <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                         <CardContent className="p-6 text-center">
-                            <Clock className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+                            <Clock className="w-12 h-12 text-gold mx-auto mb-4" />
                             <h3 className="text-xl font-bold text-white mb-2">Reduced Downtime</h3>
-                            <p className="text-gray-300">Preventive care keeps your equipment running</p>
+                            <p className="text-white/60">Preventive care keeps your equipment running</p>
                         </CardContent>
                     </Card>
-                    <Card className="bg-gray-800 border-gray-700">
+                    <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                         <CardContent className="p-6 text-center">
-                            <Shield className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+                            <Shield className="w-12 h-12 text-gold mx-auto mb-4" />
                             <h3 className="text-xl font-bold text-white mb-2">Extended Lifespan</h3>
-                            <p className="text-gray-300">Regular maintenance extends equipment life by 30%</p>
+                            <p className="text-white/60">Regular maintenance extends equipment life by 30%</p>
                         </CardContent>
                     </Card>
-                    <Card className="bg-gray-800 border-gray-700">
+                    <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                         <CardContent className="p-6 text-center">
-                            <Calendar className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+                            <Calendar className="w-12 h-12 text-gold mx-auto mb-4" />
                             <h3 className="text-xl font-bold text-white mb-2">Scheduled Service</h3>
-                            <p className="text-gray-300">Planned maintenance fits your schedule</p>
+                            <p className="text-white/60">Planned maintenance fits your schedule</p>
                         </CardContent>
                     </Card>
-                    <Card className="bg-gray-800 border-gray-700">
+                    <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                         <CardContent className="p-6 text-center">
-                            <Wrench className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+                            <Wrench className="w-12 h-12 text-gold mx-auto mb-4" />
                             <h3 className="text-xl font-bold text-white mb-2">Certified Techs</h3>
-                            <p className="text-gray-300">Factory-trained service technicians</p>
+                            <p className="text-white/60">Factory-trained service technicians</p>
                         </CardContent>
                     </Card>
                 </motion.div>
@@ -150,7 +150,7 @@ export default function MaintenancePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                    <h2 className="text-2xl font-bold mb-6 text-white">Service Contract Plans</h2>
+                    <h2 className="heading-md mb-6">Service Contract <span className="text-gradient-gold">Plans</span></h2>
                     <div className="grid md:grid-cols-3 gap-6">
                         {maintenancePlans.map((plan, index) => (
                             <motion.div
@@ -159,23 +159,23 @@ export default function MaintenancePage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                             >
-                                <Card className={`bg-gray-800 border-gray-700 ${index === 1 ? 'border-yellow-500' : ''} h-full`}>
+                                <Card className={`bg-white/5 border-white/10 ${index === 1 ? 'border-gold/50' : ''} hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300 h-full`}>
                                     <CardHeader>
                                         <CardTitle className="text-white">{plan.name}</CardTitle>
-                                        <p className="text-2xl font-bold text-yellow-500">{plan.price}</p>
-                                        <CardDescription className="text-gray-400">{plan.description}</CardDescription>
+                                        <p className="text-2xl font-bold text-gold">{plan.price}</p>
+                                        <CardDescription className="text-white/60">{plan.description}</CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         <ul className="space-y-2">
                                             {plan.features.map((feature) => (
-                                                <li key={feature} className="flex items-center gap-2 text-sm text-gray-300">
-                                                    <CheckCircle className="w-4 h-4 text-green-500" />
+                                                <li key={feature} className="flex items-center gap-2 text-sm text-white/70">
+                                                    <CheckCircle className="w-4 h-4 text-green-400" />
                                                     {feature}
                                                 </li>
                                             ))}
                                         </ul>
                                         <Button
-                                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                                            className="w-full btn-primary"
                                             onClick={() => router.push('/contact')}
                                         >
                                             Get Quote
@@ -194,21 +194,21 @@ export default function MaintenancePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                    <h2 className="text-2xl font-bold mb-6 text-white">Maintenance Schedule Guide</h2>
+                    <h2 className="heading-md mb-6">Maintenance Schedule <span className="text-gradient-gold">Guide</span></h2>
                     <div className="grid md:grid-cols-2 gap-6">
                         {maintenanceTips.map((section, index) => (
-                            <Card key={section.title} className="bg-gray-800 border-gray-700">
+                            <Card key={section.title} className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                                 <CardHeader>
                                     <CardTitle className="text-white flex items-center gap-3">
-                                        <FileText className="w-5 h-5 text-yellow-500" />
+                                        <FileText className="w-5 h-5 text-gold" />
                                         {section.title}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-2">
                                         {section.items.map((item) => (
-                                            <li key={item} className="flex items-start gap-2 text-sm text-gray-300">
-                                                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                            <li key={item} className="flex items-start gap-2 text-sm text-white/70">
+                                                <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
                                                 {item}
                                             </li>
                                         ))}
@@ -226,17 +226,17 @@ export default function MaintenancePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
                 >
-                    <Card className="bg-gray-800 border-gray-700">
+                    <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                         <CardHeader>
                             <CardTitle className="text-white">Service Coverage</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-gray-300 mb-4">
+                            <p className="text-white/60 mb-4">
                                 Our mobile service teams cover all major cities and industrial areas in Saudi Arabia:
                             </p>
                             <div className="grid md:grid-cols-4 gap-4">
                                 {['Riyadh', 'Jeddah', 'Dammam', 'Yanbu', 'Rabigh', 'Jubail', 'Al Khobar', 'Mecca'].map((city) => (
-                                    <div key={city} className="bg-gray-700/50 rounded-lg p-3 text-center">
+                                    <div key={city} className="bg-white/5 border border-white/10 rounded-lg p-3 text-center hover:border-gold/30 transition-all">
                                         <p className="font-semibold text-white">{city}</p>
                                     </div>
                                 ))}
@@ -247,19 +247,19 @@ export default function MaintenancePage() {
 
                 {/* CTA */}
                 <motion.div
-                    className="bg-gradient-to-r from-gray-800 to-gray-900 border border-yellow-500/30 rounded-lg p-8 text-center"
+                    className="bg-gradient-to-r from-gold/20 to-transparent border border-gold/30 rounded-2xl p-8 text-center"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="text-2xl font-bold mb-4 text-white">Need Emergency Service?</h2>
-                    <p className="text-gray-300 mb-6">
+                    <h2 className="heading-md mb-4">Need Emergency <span className="text-gradient-gold">Service?</span></h2>
+                    <p className="text-white/60 mb-6">
                         Our 24/7 emergency response team is available for critical repairs.
                     </p>
                     <Button
                         onClick={() => router.push('/contact')}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                        className="btn-primary"
                     >
                         <Phone className="w-4 h-4 mr-2" />
                         Contact Service Team

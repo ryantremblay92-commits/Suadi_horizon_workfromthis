@@ -89,10 +89,10 @@ export default function CategoriesPage() {
     );
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-7xl mx-auto px-4">
+        <div className="min-h-screen bg-navy text-white py-12 lg:py-16">
+            <div className="container-premium">
                 {/* Breadcrumb */}
-                <Breadcrumb className="mb-8">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink onClick={() => router.push('/')}>Home</BreadcrumbLink>
@@ -106,23 +106,23 @@ export default function CategoriesPage() {
 
                 {/* Hero Section */}
                 <motion.div
-                    className="text-center mb-12"
+                    className="text-center mb-16"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h1 className="text-4xl font-bold mb-4 text-white">Product Categories</h1>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    <h1 className="heading-lg mb-6">Product Categories</h1>
+                    <p className="text-body-lg text-white/60 max-w-3xl mx-auto mb-10">
                         Browse our comprehensive catalog of heavy equipment spare parts.
                         We stock genuine parts for all major brands.
                     </p>
 
                     {/* Search Bar */}
                     <div className="max-w-2xl mx-auto relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                         <Input
                             placeholder="Search parts by category, name, or part number..."
-                            className="pl-12 h-14 bg-gray-800 border-gray-700 text-white text-lg"
+                            className="pl-14 h-14 bg-white/5 border-white/10 text-white text-lg placeholder:text-white/30 focus:border-gold/50"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -130,7 +130,7 @@ export default function CategoriesPage() {
                 </motion.div>
 
                 {/* Categories Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredCategories.map((category, index) => (
                         <motion.div
                             key={category.id}
@@ -138,23 +138,23 @@ export default function CategoriesPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            <Card className="bg-gray-800 border-gray-700 hover:border-yellow-500/50 transition-all hover-lift">
-                                <div className="h-48 overflow-hidden">
+                            <Card className="bg-white/5 border-white/10 hover:border-gold/30 transition-all duration-300 h-full">
+                                <div className="h-52 overflow-hidden">
                                     <img
                                         src={category.image}
                                         alt={category.name}
-                                        className="w-full h-full object-cover hover-zoom"
+                                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                                     />
                                 </div>
-                                <CardHeader className="pb-2">
+                                <CardHeader className="pb-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center text-yellow-500">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-14 h-14 bg-gold/20 rounded-xl flex items-center justify-center text-gold">
                                                 {category.icon}
                                             </div>
                                             <div>
-                                                <CardTitle className="text-white text-lg">{category.name}</CardTitle>
-                                                <Badge variant="secondary" className="bg-gray-700 text-gray-300 mt-1">
+                                                <CardTitle className="text-white text-xl">{category.name}</CardTitle>
+                                                <Badge variant="secondary" className="bg-white/10 text-white/60 mt-1">
                                                     {category.count} parts
                                                 </Badge>
                                             </div>
@@ -162,20 +162,20 @@ export default function CategoriesPage() {
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <CardDescription className="text-gray-300 mb-4">
+                                    <CardDescription className="text-white/60 mb-5 text-base">
                                         {category.description}
                                     </CardDescription>
 
                                     {/* Subcategories */}
-                                    <div className="space-y-2 mb-4">
+                                    <div className="space-y-2.5 mb-5">
                                         {category.subcategories.slice(0, 3).map((sub) => (
-                                            <div key={sub} className="flex items-center gap-2 text-sm text-gray-400">
+                                            <div key={sub} className="flex items-center gap-2 text-sm text-white/50">
                                                 <ChevronRight className="w-4 h-4" />
                                                 {sub}
                                             </div>
                                         ))}
                                         {category.subcategories.length > 3 && (
-                                            <p className="text-sm text-yellow-500">
+                                            <p className="text-sm text-gold">
                                                 +{category.subcategories.length - 3} more subcategories
                                             </p>
                                         )}
@@ -183,7 +183,7 @@ export default function CategoriesPage() {
 
                                     <Button
                                         onClick={() => router.push(`/products?category=${category.id}`)}
-                                        className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                                        className="w-full bg-gold hover:bg-gold/90 text-navy font-bold"
                                     >
                                         Browse {category.name}
                                         <ChevronRight className="ml-2 w-4 h-4" />
@@ -197,14 +197,14 @@ export default function CategoriesPage() {
                 {/* No Results */}
                 {filteredCategories.length === 0 && (
                     <motion.div
-                        className="text-center py-12"
+                        className="text-center py-16"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                     >
-                        <p className="text-lg text-gray-300">No categories found matching "{searchQuery}"</p>
+                        <p className="text-xl text-white/60 mb-6">No categories found matching "{searchQuery}"</p>
                         <Button
                             variant="outline"
-                            className="mt-4 border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
+                            className="border-gold text-gold hover:bg-gold/10"
                             onClick={() => setSearchQuery('')}
                         >
                             Clear Search
@@ -214,27 +214,27 @@ export default function CategoriesPage() {
 
                 {/* CTA Section */}
                 <motion.div
-                    className="mt-16 bg-gradient-to-r from-gray-800 to-gray-900 border border-yellow-500/30 rounded-lg p-12 text-center"
+                    className="mt-20 glass-premium rounded-3xl p-12 lg:p-16 border border-white/5"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="text-2xl font-bold mb-4 text-white">Can't Find What You're Looking For?</h2>
-                    <p className="text-gray-300 mb-6">
+                    <h2 className="heading-md mb-4 text-center">Can't Find What You're Looking For?</h2>
+                    <p className="text-body-lg text-white/60 mb-8 text-center max-w-2xl mx-auto">
                         Our expert team can help you locate any part. Contact us for special orders and hard-to-find parts.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button
                             onClick={() => router.push('/contact')}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                            className="btn-primary"
                         >
                             Contact Us
                         </Button>
                         <Button
                             variant="outline"
                             onClick={() => router.push('/bulk-quote')}
-                            className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
+                            className="btn-secondary"
                         >
                             Request Quote
                         </Button>

@@ -42,9 +42,9 @@ const deliveryAreas = [
 
 export default function ShippingPage() {
     return (
-        <div className="min-h-screen bg-background py-8">
-            <div className="max-w-4xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink href="/">Home</BreadcrumbLink>

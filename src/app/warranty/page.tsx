@@ -76,9 +76,9 @@ export default function WarrantyPage() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-6xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink onClick={() => router.push('/')}>Home</BreadcrumbLink>
@@ -96,11 +96,11 @@ export default function WarrantyPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Shield className="w-10 h-10 text-yellow-500" />
+                    <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Shield className="w-10 h-10 text-gold" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-white">Warranty Information</h1>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    <h1 className="heading-lg mb-4">Warranty <span className="text-gradient-gold">Information</span></h1>
+                    <p className="text-xl text-white/70 max-w-3xl mx-auto">
                         Comprehensive warranty coverage for all heavy equipment parts.
                         We stand behind the quality of our products.
                     </p>
@@ -113,10 +113,10 @@ export default function WarrantyPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                    <h2 className="text-2xl font-bold mb-6 text-white">Coverage by Product Category</h2>
+                    <h2 className="heading-md mb-6">Coverage by Product <span className="text-gradient-gold">Category</span></h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {warrantyCategories.map((item, index) => (
-                            <Card key={item.category} className="bg-gray-800 border-gray-700">
+                            <Card key={item.category} className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-white text-lg">{item.category}</CardTitle>
                                 </CardHeader>
@@ -149,10 +149,10 @@ export default function WarrantyPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                             >
-                                <Card className={`bg-gray-800 border-gray-700 ${index === 1 ? 'border-yellow-500' : ''}`}>
+                                <Card className={`bg-white/5 border-white/10 ${index === 1 ? 'border-gold/50' : ''} hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300`}>
                                     <CardHeader>
                                         <CardTitle className="text-white">{plan.name}</CardTitle>
-                                        <p className="text-2xl font-bold text-yellow-500">{plan.duration}</p>
+                                        <p className="text-2xl font-bold text-gold">{plan.duration}</p>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         <p className="text-gray-300">{plan.coverage}</p>
@@ -166,7 +166,7 @@ export default function WarrantyPage() {
                                             ))}
                                         </ul>
                                         <Button
-                                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                                            className="w-full btn-primary"
                                             onClick={() => router.push('/contact')}
                                         >
                                             Learn More
@@ -188,10 +188,10 @@ export default function WarrantyPage() {
                 >
                     <h2 className="text-2xl font-bold mb-6 text-white">Warranty Claim Process</h2>
                     <Accordion type="single" collapsible className="space-y-4">
-                        <AccordionItem value="step1" className="bg-gray-800 border-gray-700 rounded-lg px-4">
+                        <AccordionItem value="step1" className="bg-white/5 border-white/10 rounded-lg px-4">
                             <AccordionTrigger className="text-white">
                                 <span className="flex items-center gap-3">
-                                    <span className="w-8 h-8 bg-yellow-500 text-gray-900 rounded-full flex items-center justify-center font-bold">1</span>
+                                    <span className="w-8 h-8 bg-gold text-navy rounded-full flex items-center justify-center font-bold">1</span>
                                     Submit Claim
                                 </span>
                             </AccordionTrigger>
@@ -199,10 +199,10 @@ export default function WarrantyPage() {
                                 Contact us via phone or email with your purchase details, part number, and description of the issue. Provide photos if available.
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="step2" className="bg-gray-800 border-gray-700 rounded-lg px-4">
+                        <AccordionItem value="step2" className="bg-white/5 border-white/10 rounded-lg px-4">
                             <AccordionTrigger className="text-white">
                                 <span className="flex items-center gap-3">
-                                    <span className="w-8 h-8 bg-yellow-500 text-gray-900 rounded-full flex items-center justify-center font-bold">2</span>
+                                    <span className="w-8 h-8 bg-gold text-navy rounded-full flex items-center justify-center font-bold">2</span>
                                     Evaluation
                                 </span>
                             </AccordionTrigger>
@@ -210,10 +210,10 @@ export default function WarrantyPage() {
                                 Our technical team will evaluate the claim within 3-5 business days. We may request the part to be returned for inspection.
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="step3" className="bg-gray-800 border-gray-700 rounded-lg px-4">
+                        <AccordionItem value="step3" className="bg-white/5 border-white/10 rounded-lg px-4">
                             <AccordionTrigger className="text-white">
                                 <span className="flex items-center gap-3">
-                                    <span className="w-8 h-8 bg-yellow-500 text-gray-900 rounded-full flex items-center justify-center font-bold">3</span>
+                                    <span className="w-8 h-8 bg-gold text-navy rounded-full flex items-center justify-center font-bold">3</span>
                                     Approval & Replacement
                                 </span>
                             </AccordionTrigger>
@@ -221,10 +221,10 @@ export default function WarrantyPage() {
                                 Once approved, we will ship the replacement part immediately. Standard shipping is included; expedited shipping costs may apply.
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="step4" className="bg-gray-800 border-gray-700 rounded-lg px-4">
+                        <AccordionItem value="step4" className="bg-white/5 border-white/10 rounded-lg px-4">
                             <AccordionTrigger className="text-white">
                                 <span className="flex items-center gap-3">
-                                    <span className="w-8 h-8 bg-yellow-500 text-gray-900 rounded-full flex items-center justify-center font-bold">4</span>
+                                    <span className="w-8 h-8 bg-gold text-navy rounded-full flex items-center justify-center font-bold">4</span>
                                     Return Defective Part
                                 </span>
                             </AccordionTrigger>
@@ -248,7 +248,7 @@ export default function WarrantyPage() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button
                             onClick={() => router.push('/contact')}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                            className="btn-primary"
                         >
                             <Phone className="w-4 h-4 mr-2" />
                             Contact Warranty Team

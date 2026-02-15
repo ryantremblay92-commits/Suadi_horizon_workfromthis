@@ -12,8 +12,8 @@ export default function TaxInfoPage() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-4xl mx-auto px-4">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
                 {/* Breadcrumb */}
                 <Breadcrumb className="mb-8">
                     <BreadcrumbList>
@@ -52,16 +52,16 @@ export default function TaxInfoPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <Card className="bg-gray-800 border-gray-700">
+                        <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <Percent className="w-6 h-6 text-yellow-500" />
+                                    <Percent className="w-6 h-6 text-gold" />
                                     VAT Rate (15%)
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4 text-gray-300">
+                            <CardContent className="space-y-4 text-white/70">
                                 <p>
-                                    The Kingdom of Saudi Arabia applies a Value Added Tax (VAT) rate of <strong className="text-yellow-500">15%</strong> on all taxable goods and services, as mandated by ZATCA (Zakat, Tax and Customs Authority).
+                                    The Kingdom of Saudi Arabia applies a Value Added Tax (VAT) rate of <strong className="text-gold">15%</strong> on all taxable goods and services, as mandated by ZATCA (Zakat, Tax and Customs Authority).
                                 </p>
                                 <p><strong>What this means for you:</strong></p>
                                 <ul className="list-disc list-inside space-y-2 ml-4">
@@ -81,10 +81,10 @@ export default function TaxInfoPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.1 }}
                     >
-                        <Card className="bg-gray-800 border-gray-700">
+                        <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <FileText className="w-6 h-6 text-yellow-500" />
+                                    <FileText className="w-6 h-6 text-gold" />
                                     Tax Invoice Requirements
                                 </CardTitle>
                             </CardHeader>
@@ -121,10 +121,10 @@ export default function TaxInfoPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
-                        <Card className="bg-gray-800 border-gray-700">
+                        <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <Building className="w-6 h-6 text-yellow-500" />
+                                    <Building className="w-6 h-6 text-gold" />
                                     ZATCA Compliance
                                 </CardTitle>
                             </CardHeader>
@@ -173,16 +173,16 @@ export default function TaxInfoPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.3 }}
                     >
-                        <Card className="bg-gray-800 border-gray-700">
+                        <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <AlertCircle className="w-6 h-6 text-yellow-500" />
+                                    <AlertCircle className="w-6 h-6 text-gold" />
                                     VAT Registration Information
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4 text-gray-300">
                                 <p><strong>Our VAT Registration Number:</strong></p>
-                                <p className="text-2xl font-mono text-yellow-500">310XXXXXXXXXX</p>
+                                <p className="text-2xl font-mono text-gold">310XXXXXXXXXX</p>
 
                                 <p className="mt-4"><strong>For Business Customers:</strong></p>
                                 <ul className="list-disc list-inside space-y-2 ml-4">
@@ -210,7 +210,7 @@ export default function TaxInfoPage() {
                                 <div className="flex flex-wrap gap-4 mt-4">
                                     <Button
                                         onClick={() => router.push('/contact')}
-                                        className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold"
+                                        className="btn-primary"
                                     >
                                         Contact Us
                                     </Button>
@@ -222,7 +222,7 @@ export default function TaxInfoPage() {
 
                 {/* Disclaimer */}
                 <motion.div
-                    className="mt-8 bg-gray-800/50 rounded-lg p-4 text-center"
+                    className="mt-8 bg-white/5 border border-white/10 rounded-lg p-4 text-center"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}

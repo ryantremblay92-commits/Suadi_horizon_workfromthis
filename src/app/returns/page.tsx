@@ -30,9 +30,9 @@ const ineligibleItems = [
 
 export default function ReturnsPage() {
     return (
-        <div className="min-h-screen bg-background py-8">
-            <div className="max-w-4xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -46,8 +46,11 @@ export default function ReturnsPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <h1 className="text-4xl font-bold mb-4">Returns & Refunds</h1>
-                    <p className="text-muted-foreground mb-8">Easy returns within 14 days. No hassle, no questions.</p>
+                    <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <RotateCcw className="w-10 h-10 text-gold" />
+                    </div>
+                    <h1 className="heading-lg mb-4 text-center">Returns & <span className="text-gradient-gold">Refunds</span></h1>
+                    <p className="text-xl text-white/70 mb-8 text-center">Easy returns within 14 days. No hassle, no questions.</p>
 
                     {/* Return Policy Highlights */}
                     <div className="grid md:grid-cols-3 gap-4 mb-12">

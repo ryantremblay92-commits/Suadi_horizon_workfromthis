@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import {
     Plus,
     Search,
@@ -12,7 +13,10 @@ import {
     Trash2,
     Filter,
     Download,
-    Eye
+    Eye,
+    X,
+    Upload,
+    Image as ImageIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -33,6 +37,21 @@ export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 10;
+
+    // Product form state
+    const [showProductForm, setShowProductForm] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        sku: '',
+        price: 0,
+        category: '',
+        stock: 0,
+        description: '',
+        image: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         loadProducts();
@@ -79,6 +98,105 @@ export default function AdminProductsPage() {
             loadProducts();
         } catch (err: any) {
             toast.error(err.message || 'Failed to delete product');
+        }
+    };
+
+    const openAddForm = () => {
+        setEditingProduct(null);
+        setFormData({
+            name: '',
+            sku: '',
+            price: 0,
+            category: '',
+            stock: 0,
+            description: '',
+            image: '',
+        });
+        setShowProductForm(true);
+    };
+
+    const openEditForm = (product: Product) => {
+        setEditingProduct(product);
+        setFormData({
+            name: product.name || '',
+            sku: product.sku || '',
+            price: product.price || 0,
+            category: product.category || '',
+            stock: product.stock || 0,
+            description: '',
+            image: product.image || '',
+        });
+        setShowProductForm(true);
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Create a preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setFormData(prev => ({ ...prev, image: previewUrl }));
+
+        // Upload to server
+        try {
+            const formDataUpload = new FormData();
+            formDataUpload.append('file', file);
+
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formDataUpload,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setFormData(prev => ({ ...prev, image: data.url || previewUrl }));
+                toast.success('Image uploaded successfully');
+            } else {
+                // Keep the preview URL if upload fails
+                setFormData(prev => ({ ...prev, image: previewUrl }));
+                toast.success('Image preview set (upload endpoint not configured)');
+            }
+        } catch (err) {
+            // Keep the preview URL
+            setFormData(prev => ({ ...prev, image: previewUrl }));
+            toast.success('Image preview set');
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+            headers['Content-Type'] = 'application/json';
+
+            const url = editingProduct
+                ? `/api/products/${editingProduct._id}`
+                : '/api/products';
+            const method = editingProduct ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method,
+                headers,
+                body: JSON.stringify({
+                    ...formData,
+                    isActive: true,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save product');
+            }
+
+            toast.success(editingProduct ? 'Product updated successfully' : 'Product created successfully');
+            setShowProductForm(false);
+            loadProducts();
+        } catch (err: any) {
+            toast.error(err.message || 'Failed to save product');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -129,7 +247,7 @@ export default function AdminProductsPage() {
                         <Filter className="h-4 w-4 mr-2" />
                         Filter
                     </Button>
-                    <Button className="bg-primary hover:bg-primary/90">
+                    <Button className="bg-primary hover:bg-primary/90" onClick={openAddForm}>
                         <Plus className="h-4 w-4 mr-2" />
                         Add Product
                     </Button>
@@ -217,7 +335,7 @@ export default function AdminProductsPage() {
                                                     <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10">
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10">
+                                                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10" onClick={() => openEditForm(product)}>
                                                         <Edit className="h-4 w-4" />
                                                     </Button>
                                                     <Button
@@ -270,6 +388,178 @@ export default function AdminProductsPage() {
                         >
                             Next
                         </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Product Form Dialog */}
+            {showProductForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    {/* Backdrop */}
+                    <div
+                        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                        onClick={() => setShowProductForm(false)}
+                    />
+
+                    {/* Dialog */}
+                    <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border border-white/10 rounded-2xl shadow-2xl">
+                        {/* Header */}
+                        <div className="sticky top-0 flex items-center justify-between p-6 border-b border-white/10 bg-gray-900">
+                            <h2 className="text-xl font-bold text-white font-display">
+                                {editingProduct ? 'Edit Product' : 'Add New Product'}
+                            </h2>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setShowProductForm(false)}
+                                className="text-gray-400 hover:text-white"
+                            >
+                                <X className="h-5 w-5" />
+                            </Button>
+                        </div>
+
+                        {/* Form */}
+                        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                            {/* Image Upload */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-300">Product Image</label>
+                                <div className="flex items-center gap-4">
+                                    <div className="relative w-24 h-24 rounded-xl border-2 border-dashed border-gray-700 flex items-center justify-center overflow-hidden bg-gray-800">
+                                        {formData.image ? (
+                                            <img
+                                                src={formData.image}
+                                                alt="Product"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <ImageIcon className="w-8 h-8 text-gray-600" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleImageUpload}
+                                            accept="image/*"
+                                            className="hidden"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                                        >
+                                            <Upload className="h-4 w-4 mr-2" />
+                                            Upload Image
+                                        </Button>
+                                        <p className="mt-2 text-xs text-gray-500">
+                                            Supports JPG, PNG, WebP. Max 5MB.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Name & SKU */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Product Name *</label>
+                                    <Input
+                                        value={formData.name}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                                        placeholder="Enter product name"
+                                        required
+                                        className="bg-gray-800 border-gray-700 text-white"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">SKU *</label>
+                                    <Input
+                                        value={formData.sku}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, sku: e.target.value }))}
+                                        placeholder="Enter SKU"
+                                        required
+                                        className="bg-gray-800 border-gray-700 text-white"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Price & Stock */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Price ($) *</label>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step="0.01"
+                                        value={formData.price}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))}
+                                        placeholder="0.00"
+                                        required
+                                        className="bg-gray-800 border-gray-700 text-white"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Stock *</label>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        value={formData.stock}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, stock: parseInt(e.target.value) || 0 }))}
+                                        placeholder="0"
+                                        required
+                                        className="bg-gray-800 border-gray-700 text-white"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Category */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-300">Category *</label>
+                                <Input
+                                    value={formData.category}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                                    placeholder="e.g., Engine, Hydraulics, Transmission"
+                                    required
+                                    className="bg-gray-800 border-gray-700 text-white"
+                                />
+                            </div>
+
+                            {/* Description */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-300">Description</label>
+                                <Textarea
+                                    value={formData.description}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                                    placeholder="Enter product description..."
+                                    rows={4}
+                                    className="bg-gray-800 border-gray-700 text-white resize-none"
+                                />
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setShowProductForm(false)}
+                                    className="border-gray-700 text-gray-300"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="bg-primary hover:bg-primary/90"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                                            Saving...
+                                        </>
+                                    ) : editingProduct ? 'Update Product' : 'Create Product'}
+                                </Button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

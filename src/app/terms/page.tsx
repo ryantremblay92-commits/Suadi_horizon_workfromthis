@@ -12,8 +12,8 @@ export default function TermsPage() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-4xl mx-auto px-4">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
                 <Breadcrumb className="mb-8">
                     <BreadcrumbList>
                         <BreadcrumbItem>
@@ -32,15 +32,15 @@ export default function TermsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <FileText className="w-10 h-10 text-yellow-500" />
+                    <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <FileText className="w-10 h-10 text-gold" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-white">Terms of Service</h1>
+                    <h1 className="heading-lg mb-4">Terms of <span className="text-gradient-gold">Service</span></h1>
                     <p className="text-xl text-gray-300">Please read these terms carefully before using our services.</p>
                 </motion.div>
 
-                <div className="bg-gray-800 rounded-lg p-4 mb-8 text-center">
-                    <p className="text-gray-300"><span className="text-yellow-500 font-semibold">Last Updated:</span> January 2025</p>
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-8 text-center">
+                    <p className="text-white/60"><span className="text-gold font-semibold">Last Updated:</span> January 2025</p>
                 </div>
 
                 <div className="space-y-8">
@@ -120,16 +120,16 @@ export default function TermsPage() {
                             <CardContent className="space-y-4 text-gray-300">
                                 <p><strong>Coverage:</strong> Varies by product category (6 months to 2 years).</p>
                                 <p><strong>Exclusions:</strong> Damage from misuse or improper installation.</p>
-                                <p>See our <a href="/warranty" className="text-yellow-500 hover:underline">Warranty Page</a> for details.</p>
+                                <p>See our <a href="/warranty" className="text-gold hover:underline">Warranty Page</a> for details.</p>
                             </CardContent>
                         </Card>
                     </motion.div>
                 </div>
 
-                <motion.div className="mt-12 bg-gradient-to-r from-gray-800 to-gray-900 border border-yellow-500/30 rounded-lg p-8 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <h2 className="text-2xl font-bold mb-4 text-white">Questions About These Terms?</h2>
-                    <p className="text-gray-300 mb-6">Contact us for any questions about our Terms of Service.</p>
-                    <Button onClick={() => router.push('/contact')} className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold">Contact Us</Button>
+                <motion.div className="mt-12 bg-gradient-to-r from-gold/20 to-transparent border border-gold/30 rounded-2xl p-8 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <h2 className="heading-md mb-4">Questions About These <span className="text-gradient-gold">Terms?</span></h2>
+                    <p className="text-white/60 mb-6">Contact us for any questions about our Terms of Service.</p>
+                    <Button onClick={() => router.push('/contact')} className="btn-primary">Contact Us</Button>
                 </motion.div>
             </div>
         </div>

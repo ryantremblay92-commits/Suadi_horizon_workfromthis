@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Grid3x3, List, Loader2, SlidersHorizontal, Settings } from 'lucide-react';
+import { Grid3x3, List, Loader2, SlidersHorizontal, Settings, Search, X, ChevronLeft, ChevronRight, Package, Quote, Zap, Battery, Cpu, Gauge, Wrench } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Input } from '@/components/ui/input';
 import { getProducts, Product } from '@/api/products';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductTableRow } from '@/components/ProductTableRow';
@@ -23,16 +24,14 @@ import { toast } from 'sonner';
 import { ConfiguratorModal } from '@/components/configurator';
 import { ComparisonBar, ComparisonModal } from '@/components/comparison';
 import { useComparison } from '@/contexts/ComparisonContext';
-import { Equipment, matchProductsToEquipment } from '@/lib/equipment';
+import { Equipment } from '@/lib/equipment';
 import equipmentDatabase from '../../../equipment-database.json';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ProductsPageClient() {
     const router = useRouter();
-    const pathname = usePathname();
     const searchParams = useSearchParams();
-
 
     const [products, setProducts] = useState<Product[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -53,29 +52,32 @@ export default function ProductsPageClient() {
     const [isLoading, setIsLoading] = useState(true);
     const gridRef = useRef<HTMLDivElement>(null);
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 50;
+
+    // Debounced search state
+    const [searchInput, setSearchInput] = useState(filters.search);
+    const [isSearching, setIsSearching] = useState(false);
+
+    // Reduced motion preference
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
     // Product Discovery System state
     const { comparisonProducts } = useComparison();
     const [configuratorOpen, setConfiguratorOpen] = useState(false);
     const [comparisonModalOpen, setComparisonModalOpen] = useState(false);
     const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
-    const [compatibleOnly, setCompatibleOnly] = useState(false);
 
+    // Load products
     useEffect(() => {
         const loadProducts = async () => {
             setIsLoading(true);
-            console.log('🛍️ [DEBUG] Products: Starting to load products');
             try {
-                console.log('🔗 [DEBUG] Products: Making API call to getProducts()');
                 const res = await getProducts();
-                console.log('✅ [DEBUG] Products: API call successful', {
-                    totalProducts: res.products?.length || 0,
-                    totalCount: res.total,
-                });
                 setProducts(res.products);
                 setFilteredProducts(res.products);
-                console.log('🎆 [DEBUG] Products: State updated successfully');
             } catch (error) {
-                console.error('🚫 [DEBUG] Products: API call failed', error);
                 toast.error('Failed to load products');
             } finally {
                 setIsLoading(false);
@@ -83,10 +85,23 @@ export default function ProductsPageClient() {
         };
 
         loadProducts();
-    }, [toast]);
+    }, []);
 
+    // Check for reduced motion preference
     useEffect(() => {
-        // Apply search param filters if present
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefersReducedMotion(mediaQuery.matches);
+
+        const handleChange = (e: MediaQueryListEvent) => {
+            setPrefersReducedMotion(e.matches);
+        };
+
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, []);
+
+    // Apply search param filters if present
+    useEffect(() => {
         const category = searchParams.get('category');
         if (category) {
             setFilters(prev => ({
@@ -96,7 +111,31 @@ export default function ProductsPageClient() {
         }
     }, [searchParams]);
 
+    // Debounced search effect
     useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchInput !== filters.search) {
+                setFilters(prev => ({ ...prev, search: searchInput }));
+            }
+            setIsSearching(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [searchInput, filters.search]);
+
+    // Handle search input change
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchInput(e.target.value);
+        setIsSearching(true);
+    };
+
+    // Reset page when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filters.brands, filters.categories, filters.priceRange, filters.search, sortBy]);
+
+    // Computed filtered and sorted products
+    const processedProducts = useMemo(() => {
         let filtered = [...products];
 
         // Apply brand filter
@@ -139,12 +178,25 @@ export default function ProductsPageClient() {
                 break;
         }
 
-        setFilteredProducts(filtered);
+        return filtered;
     }, [filters, sortBy, products]);
+
+    // Paginated products
+    const paginatedProducts = useMemo(() => {
+        const startIndex = (currentPage - 1) * productsPerPage;
+        return processedProducts.slice(startIndex, startIndex + productsPerPage);
+    }, [processedProducts, currentPage, productsPerPage]);
+
+    const totalPages = Math.ceil(processedProducts.length / productsPerPage);
+
+    // Set filtered products for display
+    useEffect(() => {
+        setFilteredProducts(processedProducts);
+    }, [processedProducts]);
 
     // GSAP Scroll Animation for Product Cards
     useEffect(() => {
-        if (!gridRef.current || isLoading || filteredProducts.length === 0) return;
+        if (!gridRef.current || isLoading || paginatedProducts.length === 0 || prefersReducedMotion) return;
 
         const cards = gridRef.current.querySelectorAll<HTMLElement>('.product-card-animated');
 
@@ -171,7 +223,7 @@ export default function ProductsPageClient() {
         }, gridRef);
 
         return () => ctx.revert();
-    }, [filteredProducts, isLoading]);
+    }, [paginatedProducts, isLoading, prefersReducedMotion]);
 
     const handleAddToCart = (product: Product) => {
         addToCart({
@@ -202,8 +254,19 @@ export default function ProductsPageClient() {
             priceRange: [0, 5000],
             search: '',
         });
+        setSearchInput('');
         setMobileFilterOpen(false);
     };
+
+    const removeFilter = (type: 'brand' | 'category', value: string) => {
+        if (type === 'brand') {
+            setFilters({ ...filters, brands: filters.brands.filter(b => b !== value) });
+        } else {
+            setFilters({ ...filters, categories: filters.categories.filter(c => c !== value) });
+        }
+    };
+
+    const hasActiveFilters = filters.brands.length > 0 || filters.categories.length > 0 || filters.search;
 
     return (
         <div className="min-h-screen bg-navy text-white py-8 relative">
@@ -229,6 +292,96 @@ export default function ProductsPageClient() {
                         )}
                     </BreadcrumbList>
                 </Breadcrumb>
+
+                {/* Quick Category Links - Common in E-commerce */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-2 mb-4">
+                        <h2 className="text-lg font-semibold text-white">Shop by Category</h2>
+                        <Button
+                            variant="link"
+                            className="text-gold ml-auto"
+                            onClick={() => router.push('/categories')}
+                        >
+                            View All Categories
+                        </Button>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                        {[
+                            { name: 'Engine', icon: Zap, color: 'from-orange-500/20 to-red-500/20 border-orange-500/30' },
+                            { name: 'Hydraulics', icon: Battery, color: 'from-blue-500/20 to-cyan-500/20 border-blue-500/30' },
+                            { name: 'Electrical', icon: Cpu, color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/30' },
+                            { name: 'Transmission', icon: Gauge, color: 'from-purple-500/20 to-pink-500/20 border-purple-500/30' },
+                            { name: 'Undercarriage', icon: Wrench, color: 'from-green-500/20 to-emerald-500/20 border-green-500/30' },
+                            { name: 'Attachments', icon: Package, color: 'from-slate-500/20 to-zinc-500/20 border-slate-500/30' },
+                        ].map((cat) => (
+                            <button
+                                key={cat.name}
+                                onClick={() => setFilters(prev => ({ ...prev, categories: [cat.name] }))}
+                                className={`p-4 rounded-xl bg-gradient-to-br ${cat.color} border hover:border-gold/50 transition-all duration-300 group text-left`}
+                            >
+                                <cat.icon className="w-6 h-6 text-gold mb-2 group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-medium text-white">{cat.name}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Bulk Quote Banner */}
+                <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-gold/10 via-yellow-500/10 to-gold/10 border border-gold/20">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-gold/20">
+                                <Quote className="w-5 h-5 text-gold" />
+                            </div>
+                            <div>
+                                <h3 className="text-white font-semibold">Need a Bulk Quote?</h3>
+                                <p className="text-sm text-slate-400">Get special pricing for large orders, fleet purchases, or recurring orders</p>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="border-gold text-gold hover:bg-gold hover:text-navy whitespace-nowrap"
+                            onClick={() => router.push('/bulk-quote')}
+                        >
+                            Request Bulk Quote
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Page Header with Search */}
+                <div className="mb-8 space-y-4">
+                    <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl lg:text-4xl font-bold text-white font-display tracking-tight">Spare Parts</h1>
+                            <p className="text-slate-400 text-sm lg:text-base mt-1">
+                                Showing <span className="text-gold font-bold">{processedProducts.length}</span> of {products.length} products
+                            </p>
+                        </div>
+
+                        {/* Search Bar */}
+                        <div className="relative w-full lg:w-96">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <Input
+                                type="text"
+                                placeholder="Search parts by name or SKU..."
+                                value={searchInput}
+                                onChange={handleSearchChange}
+                                className="pl-10 pr-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-gold/50 focus:ring-gold/20"
+                            />
+                            {searchInput && (
+                                <button
+                                    onClick={() => {
+                                        setSearchInput('');
+                                        setFilters(prev => ({ ...prev, search: '' }));
+                                    }}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
                 {/* Mobile Filter Button */}
                 <div className="lg:hidden mb-4">
@@ -260,36 +413,70 @@ export default function ProductsPageClient() {
 
                     {/* Main Content */}
                     <div className="flex-1">
-                        {/* Header */}
-                        <div className="mb-6 space-y-4">
-                            <h1 className="text-2xl lg:text-4xl font-bold text-white font-display tracking-tight">Spare Parts</h1>
-                            <p className="text-slate-400 text-sm lg:text-base">
-                                Showing <span className="text-gold font-bold">{filteredProducts.length}</span> of {products.length} products
-                            </p>
+                        {/* Active Filters Summary */}
+                        {hasActiveFilters && (
+                            <div className="mb-6 flex flex-wrap gap-2 items-center">
+                                <span className="text-sm text-slate-400">Active filters:</span>
+                                {filters.search && (
+                                    <span className="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                                        Search: "{filters.search}"
+                                        <button onClick={() => {
+                                            setSearchInput('');
+                                            setFilters(prev => ({ ...prev, search: '' }));
+                                        }} className="hover:text-white">
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </span>
+                                )}
+                                {filters.brands.map(brand => (
+                                    <span key={brand} className="bg-yellow-500/20 text-yellow-500 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                                        {brand}
+                                        <button onClick={() => removeFilter('brand', brand)} className="hover:text-white">
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </span>
+                                ))}
+                                {filters.categories.map(cat => (
+                                    <span key={cat} className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                                        {cat}
+                                        <button onClick={() => removeFilter('category', cat)} className="hover:text-white">
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </span>
+                                ))}
+                                <button
+                                    onClick={handleClearFilters}
+                                    className="text-sm text-red-400 hover:text-red-300 ml-2 underline"
+                                >
+                                    Clear all
+                                </button>
+                            </div>
+                        )}
 
-                            {/* Controls */}
-                            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                                <div className="flex gap-2">
-                                    <ToggleGroup type="single" value={viewMode} onValueChange={(v) => setViewMode(v as 'grid' | 'list')}>
-                                        <ToggleGroupItem value="grid" aria-label="Grid view">
-                                            <Grid3x3 className="w-4 h-4" />
-                                        </ToggleGroupItem>
-                                        <ToggleGroupItem value="list" aria-label="List view">
-                                            <List className="w-4 h-4" />
-                                        </ToggleGroupItem>
-                                    </ToggleGroup>
+                        {/* Controls */}
+                        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-6">
+                            <div className="flex gap-2 flex-wrap">
+                                <ToggleGroup type="single" value={viewMode} onValueChange={(v) => setViewMode(v as 'grid' | 'list')}>
+                                    <ToggleGroupItem value="grid" aria-label="Grid view" className="px-3">
+                                        <Grid3x3 className="w-4 h-4" />
+                                    </ToggleGroupItem>
+                                    <ToggleGroupItem value="list" aria-label="List view" className="px-3">
+                                        <List className="w-4 h-4" />
+                                    </ToggleGroupItem>
+                                </ToggleGroup>
 
-                                    {/* Configure Equipment Button */}
-                                    <Button
-                                        onClick={() => setConfiguratorOpen(true)}
-                                        variant="outline"
-                                        className="glass border-gold/30 text-gold hover:bg-gold/10 hover:border-gold transition-all"
-                                    >
-                                        <Settings className="w-4 h-4 mr-2" />
-                                        Configure Equipment
-                                    </Button>
-                                </div>
+                                {/* Configure Equipment Button */}
+                                <Button
+                                    onClick={() => setConfiguratorOpen(true)}
+                                    variant="outline"
+                                    className="glass border-gold/30 text-gold hover:bg-gold/10 hover:border-gold transition-all"
+                                >
+                                    <Settings className="w-4 h-4 mr-2" />
+                                    Configure Equipment
+                                </Button>
+                            </div>
 
+                            <div className="flex items-center gap-3 w-full sm:w-auto">
                                 <Select value={sortBy} onValueChange={setSortBy}>
                                     <SelectTrigger className="w-full sm:w-48 glass border-white/10 text-white focus:ring-gold/50">
                                         <SelectValue placeholder="Sort by" />
@@ -305,37 +492,19 @@ export default function ProductsPageClient() {
                             </div>
                         </div>
 
-                        {/* Active Filters Summary - Mobile */}
-                        {(filters.brands.length > 0 || filters.categories.length > 0) && (
-                            <div className="lg:hidden mb-4 flex flex-wrap gap-2">
-                                {filters.brands.map(brand => (
-                                    <span key={brand} className="bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                                        {brand}
-                                        <button onClick={() => setFilters({ ...filters, brands: filters.brands.filter(b => b !== brand) })}>×</button>
-                                    </span>
-                                ))}
-                                {filters.categories.map(cat => (
-                                    <span key={cat} className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                                        {cat}
-                                        <button onClick={() => setFilters({ ...filters, categories: filters.categories.filter(c => c !== cat) })}>×</button>
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-
                         {/* Loading State */}
                         {isLoading ? (
                             <ShimmerGrid count={6} />
                         ) : (
                             <>
                                 {/* Products Grid/List */}
-                                {filteredProducts.length > 0 ? (
+                                {paginatedProducts.length > 0 ? (
                                     viewMode === 'grid' ? (
                                         <div
                                             ref={gridRef}
                                             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
                                         >
-                                            {filteredProducts.map((product, index) => (
+                                            {paginatedProducts.map((product, index) => (
                                                 <div key={product._id} className="product-card-animated">
                                                     <ProductCard
                                                         product={product}
@@ -353,7 +522,7 @@ export default function ProductsPageClient() {
                                             animate={{ opacity: 1 }}
                                             transition={{ duration: 0.3 }}
                                         >
-                                            {filteredProducts.map((product) => (
+                                            {paginatedProducts.map((product) => (
                                                 <ProductTableRow
                                                     key={product._id}
                                                     product={product}
@@ -365,20 +534,83 @@ export default function ProductsPageClient() {
                                     )
                                 ) : (
                                     <motion.div
-                                        className="text-center py-12"
+                                        className="text-center py-16"
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        <p className="text-lg text-gray-300">No products found matching your filters</p>
+                                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-4">
+                                            <Package className="w-8 h-8 text-slate-400" />
+                                        </div>
+                                        <p className="text-lg text-gray-300 mb-2">No products found matching your filters</p>
+                                        <p className="text-sm text-slate-500 mb-6">Try adjusting your search or filter criteria</p>
                                         <Button
                                             variant="outline"
-                                            className="mt-4 border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
+                                            className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
                                             onClick={handleClearFilters}
                                         >
                                             Clear Filters
                                         </Button>
                                     </motion.div>
+                                )}
+
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <p className="text-sm text-slate-400">
+                                            Showing {((currentPage - 1) * productsPerPage) + 1} to {Math.min(currentPage * productsPerPage, processedProducts.length)} of {processedProducts.length} products
+                                        </p>
+
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                                disabled={currentPage === 1}
+                                                className="border-white/10 hover:border-gold/30"
+                                            >
+                                                <ChevronLeft className="w-4 h-4" />
+                                            </Button>
+
+                                            {/* Page Numbers */}
+                                            <div className="flex items-center gap-1">
+                                                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                                    let pageNum: number;
+                                                    if (totalPages <= 5) {
+                                                        pageNum = i + 1;
+                                                    } else if (currentPage <= 3) {
+                                                        pageNum = i + 1;
+                                                    } else if (currentPage >= totalPages - 2) {
+                                                        pageNum = totalPages - 4 + i;
+                                                    } else {
+                                                        pageNum = currentPage - 2 + i;
+                                                    }
+
+                                                    return (
+                                                        <Button
+                                                            key={pageNum}
+                                                            variant={currentPage === pageNum ? 'default' : 'ghost'}
+                                                            size="icon"
+                                                            onClick={() => setCurrentPage(pageNum)}
+                                                            className={currentPage === pageNum ? 'bg-gold text-navy hover:bg-gold/90' : 'border-white/10 hover:border-gold/30'}
+                                                        >
+                                                            {pageNum}
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </div>
+
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                                disabled={currentPage === totalPages}
+                                                className="border-white/10 hover:border-gold/30"
+                                            >
+                                                <ChevronRight className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    </div>
                                 )}
                             </>
                         )}

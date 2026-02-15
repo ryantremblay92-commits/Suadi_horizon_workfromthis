@@ -58,83 +58,60 @@ export default function HelpPage() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     return (
-        <div className="min-h-screen bg-background py-8">
-            <div className="max-w-4xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbPage>Help Center</BreadcrumbPage>
-                    </BreadcrumbList>
-                </Breadcrumb>
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
+                {/* Hero Section */}
+                <div className="max-w-3xl mx-auto text-center mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h1 className="heading-lg mb-6">How Can We <span className="text-gradient-gold">Help You?</span></h1>
+                        <p className="text-body-lg text-white/70 mb-10">
+                            Find answers to common questions or get in touch with our support team
+                        </p>
 
-                {/* Hero Search */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold mb-4">How can we help you?</h1>
-                    <p className="text-muted-foreground mb-6">Search our knowledge base or browse categories below</p>
-                    <div className="max-w-xl mx-auto relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                        <Input
-                            placeholder="Search for help..."
-                            className="pl-12 h-12 text-lg glass-light"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                {/* Contact Cards */}
-                <div className="grid md:grid-cols-3 gap-4 mb-12">
-                    {contactOptions.map((option, index) => (
-                        <motion.div
-                            key={option.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                        >
-                            <Card className="glass-light dark:glass-dark hover:border-primary/50 transition-all cursor-pointer">
-                                <CardContent className="p-6 text-center">
-                                    <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                        <div className="text-primary">{option.icon}</div>
-                                    </div>
-                                    <h3 className="font-semibold mb-1">{option.title}</h3>
-                                    <p className="text-primary font-medium">{option.value}</p>
-                                    <p className="text-sm text-muted-foreground">{option.desc}</p>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    ))}
+                        {/* Search */}
+                        <div className="relative max-w-xl mx-auto">
+                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                            <Input
+                                type="text"
+                                placeholder="Search for help..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-14 pr-5 py-4 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-gold/50 focus:ring-gold/20 rounded-full text-lg"
+                            />
+                        </div>
+                    </motion.div>
                 </div>
 
                 {/* FAQ Categories */}
-                <div className="space-y-8">
-                    {faqCategories.map((category, catIndex) => (
+                <div className="grid md:grid-cols-2 gap-6 mb-16">
+                    {faqCategories.map((category, idx) => (
                         <motion.div
                             key={category.title}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: catIndex * 0.15 }}
+                            transition={{ duration: 0.5, delay: idx * 0.1 }}
                         >
-                            <Card className="glass-light dark:glass-dark">
-                                <CardHeader className="flex flex-row items-center gap-3">
-                                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
-                                        <div className="text-primary">{category.icon}</div>
-                                    </div>
-                                    <CardTitle>{category.title}</CardTitle>
+                            <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300 h-full">
+                                <CardHeader className="pb-4">
+                                    <CardTitle className="flex items-center gap-3 text-xl font-semibold">
+                                        <span className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold">
+                                            {category.icon}
+                                        </span>
+                                        {category.title}
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <Accordion type="single" collapsible className="w-full">
-                                        {category.questions.map((item, qIndex) => (
-                                            <AccordionItem key={qIndex} value={`${catIndex}-${qIndex}`}>
-                                                <AccordionTrigger className="text-left">
-                                                    <span className="flex items-center gap-2">
-                                                        <FileText className="w-4 h-4 text-muted-foreground" />
-                                                        {item.q}
-                                                    </span>
+                                    <Accordion type="single" collapsible className="text-white/80">
+                                        {category.questions.map((item, qIdx) => (
+                                            <AccordionItem key={qIdx} value={`item-${idx}-${qIdx}`} className="border-white/10">
+                                                <AccordionTrigger className="text-left hover:text-gold hover:no-underline py-4">
+                                                    {item.q}
                                                 </AccordionTrigger>
-                                                <AccordionContent className="text-muted-foreground">
+                                                <AccordionContent className="text-white/60 leading-relaxed">
                                                     {item.a}
                                                 </AccordionContent>
                                             </AccordionItem>
@@ -145,6 +122,31 @@ export default function HelpPage() {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Contact Options */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                    <div className="text-center mb-10">
+                        <h2 className="heading-md mb-4">Still Need <span className="text-gradient-gold">Assistance?</span></h2>
+                        <p className="text-white/60">Our support team is here to help you</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        {contactOptions.map((option, idx) => (
+                            <Card key={idx} className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300 text-center p-6">
+                                <div className="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4 text-gold">
+                                    {option.icon}
+                                </div>
+                                <h3 className="font-semibold text-lg mb-1">{option.title}</h3>
+                                <p className="text-gold font-medium">{option.value}</p>
+                                <p className="text-white/50 text-sm mt-1">{option.desc}</p>
+                            </Card>
+                        ))}
+                    </div>
+                </motion.div>
             </div>
         </div>
     );

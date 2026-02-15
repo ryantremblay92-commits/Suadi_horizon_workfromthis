@@ -53,9 +53,9 @@ export default function BulkQuotePage() {
     };
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-6xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
+        <div className="min-h-screen bg-navy text-white py-12 lg:py-16">
+            <div className="container-premium">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem><BreadcrumbLink onClick={() => router.push('/')}>Home</BreadcrumbLink></BreadcrumbItem>
                         <BreadcrumbSeparator />
@@ -63,20 +63,20 @@ export default function BulkQuotePage() {
                     </BreadcrumbList>
                 </Breadcrumb>
 
-                <motion.div className="mb-12 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-                    <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <FileText className="w-10 h-10 text-yellow-500" />
+                <motion.div className="mb-16 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+                    <div className="w-24 h-24 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <FileText className="w-12 h-12 text-gold" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-white">B2B Bulk Quote Request</h1>
-                    <p className="text-xl text-gray-300">Get competitive pricing for large orders and project requirements</p>
+                    <h1 className="heading-lg mb-5">B2B Bulk Quote Request</h1>
+                    <p className="text-body-lg text-white/60">Get competitive pricing for large orders and project requirements</p>
                 </motion.div>
 
                 <div className="grid lg:grid-cols-3 gap-8 mb-12">
                     <motion.div className="lg:col-span-2" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                        <Card className="bg-gray-800 border-gray-700">
+                        <Card className="bg-white/5 border-white/10">
                             <CardHeader>
                                 <CardTitle className="text-white text-2xl flex items-center gap-3">
-                                    <Building2 className="w-6 h-6 text-yellow-500" />Request a Quote
+                                    <Building2 className="w-6 h-6 text-gold" />Request a Quote
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>

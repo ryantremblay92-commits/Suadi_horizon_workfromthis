@@ -12,9 +12,9 @@ export default function PrivacyPage() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-background text-white py-8">
-            <div className="max-w-4xl mx-auto px-4">
-                <Breadcrumb className="mb-8">
+        <div className="min-h-screen bg-navy text-white pt-32 pb-20">
+            <div className="container mx-auto px-4">
+                <Breadcrumb className="mb-10">
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink onClick={() => router.push('/')}>Home</BreadcrumbLink>
@@ -32,18 +32,18 @@ export default function PrivacyPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Shield className="w-10 h-10 text-yellow-500" />
+                    <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Shield className="w-10 h-10 text-gold" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-white">Privacy Policy</h1>
-                    <p className="text-xl text-gray-300">
+                    <h1 className="heading-lg mb-4">Privacy <span className="text-gradient-gold">Policy</span></h1>
+                    <p className="text-xl text-white/70">
                         Your privacy is important to us. Learn how we protect your information.
                     </p>
                 </motion.div>
 
-                <div className="bg-gray-800 rounded-lg p-4 mb-8 text-center">
-                    <p className="text-gray-300">
-                        <span className="text-yellow-500 font-semibold">Last Updated:</span> January 2025
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-8 text-center">
+                    <p className="text-white/60">
+                        <span className="text-gold font-semibold">Last Updated:</span> January 2025
                     </p>
                 </div>
 
@@ -54,14 +54,14 @@ export default function PrivacyPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <Card className="bg-gray-800 border-gray-700">
+                        <Card className="bg-white/5 border-white/10 hover:border-gold/30 hover:bg-white/[0.07] transition-all duration-300">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <Eye className="w-6 h-6 text-yellow-500" />
+                                    <Eye className="w-6 h-6 text-gold" />
                                     Information We Collect
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4 text-gray-300">
+                            <CardContent className="space-y-4 text-white/70">
                                 <p>We collect information you provide directly to us:</p>
                                 <ul className="list-disc list-inside space-y-2 ml-4">
                                     <li><strong>Personal Information:</strong> Name, email, phone, company details</li>
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
                         <Card className="bg-gray-800 border-gray-700">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <Lock className="w-6 h-6 text-yellow-500" />
+                                    <Lock className="w-6 h-6 text-gold" />
                                     How We Use Your Information
                                 </CardTitle>
                             </CardHeader>
@@ -106,7 +106,7 @@ export default function PrivacyPage() {
                         <Card className="bg-gray-800 border-gray-700">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <UserCheck className="w-6 h-6 text-yellow-500" />
+                                    <UserCheck className="w-6 h-6 text-gold" />
                                     Your Rights
                                 </CardTitle>
                             </CardHeader>
@@ -130,7 +130,7 @@ export default function PrivacyPage() {
                         <Card className="bg-gray-800 border-gray-700">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-3 text-white">
-                                    <Globe className="w-6 h-6 text-yellow-500" />
+                                    <Globe className="w-6 h-6 text-gold" />
                                     Data Sharing
                                 </CardTitle>
                             </CardHeader>

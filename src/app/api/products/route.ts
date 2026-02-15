@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         const priceMax = searchParams.get('priceMax');
         const search = searchParams.get('search');
         const page = parseInt(searchParams.get('page') || '1');
-        const limit = parseInt(searchParams.get('limit') || '10');
+        const limit = parseInt(searchParams.get('limit') || '100');
 
         // Build query
         const query: any = {};

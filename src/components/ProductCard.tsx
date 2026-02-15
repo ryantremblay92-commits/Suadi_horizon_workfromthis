@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { motion } from 'framer-motion';
+import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { ShoppingCart, Eye, CheckCircle2, Circle, Star, ArrowRight } from 'lucide-react';
+import { ShoppingCart, Eye, CheckCircle2, Circle, Star, ArrowRight, Package, Truck, FileText, Heart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Product } from '@/api/products';
 import { useComparison } from '@/contexts/ComparisonContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 
 interface ProductCardProps {
   product: Product;
@@ -29,7 +30,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   // Comparison functionality
   const { comparisonProducts, addProduct, removeProduct, isFull } = useComparison();
+  const { wishlistItems, addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isInComparison = comparisonProducts.includes(product._id);
+  const inWishlist = isInWishlist(product._id);
   const canAddToComparison = !isFull || isInComparison;
 
   const cardVariants = {
@@ -83,8 +86,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   isInComparison ? removeProduct(product._id) : addProduct(product._id);
                 }}
                 disabled={!canAddToComparison}
+                aria-label={isInComparison ? 'Remove from compare' : 'Add to compare'}
               >
                 {isInComparison ? <CheckCircle2 className="w-4 h-4" /> : <Circle className="w-4 h-4" />}
+              </motion.button>
+
+              {/* Wishlist Toggle */}
+              <motion.button
+                className={`w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${inWishlist
+                  ? 'bg-red-500 border-red-500 text-white'
+                  : 'bg-black/30 border-white/20 text-white hover:bg-red-500 hover:border-red-500'
+                  }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  inWishlist ? removeFromWishlist(product._id) : addToWishlist(product._id);
+                }}
+                aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+              >
+                <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
               </motion.button>
 
               {/* Stock Badge */}
@@ -108,6 +127,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Content */}
         <CardContent className="flex-1 p-5 space-y-4">
+          {/* SKU / Part Number - Important for B2B */}
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <Package className="w-3 h-3" />
+            <span className="font-mono">SKU: {product.sku || 'N/A'}</span>
+          </div>
+
           <div>
             <div className="text-xs font-bold text-gold/90 mb-1 uppercase tracking-wider font-display">
               {product.brand}
@@ -128,11 +153,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <div className="text-xl font-bold text-white font-display">
                 ${product.price.toLocaleString()}
               </div>
+              {/* Bulk pricing indicator */}
+              <p className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+                <FileText className="w-3 h-3" />
+                Bulk pricing available
+              </p>
             </div>
             <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded">
               <Star className="w-3.5 h-3.5 fill-gold text-gold" />
               <span className="text-sm font-bold text-white">{product.rating}</span>
             </div>
+          </div>
+
+          {/* Shipping Info */}
+          <div className="flex items-center gap-2 text-xs text-slate-400 pt-2 border-t border-white/5">
+            <Truck className="w-3 h-3 text-gold" />
+            <span>Free shipping on orders over $500</span>
           </div>
         </CardContent>
 
