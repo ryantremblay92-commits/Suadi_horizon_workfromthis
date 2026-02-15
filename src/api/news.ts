@@ -61,8 +61,22 @@ export const getNewsById = async (idOrSlug: string): Promise<{ news: NewsItem }>
 
 // Admin functions
 export const getAllAdminNews = async (): Promise<NewsItem[]> => {
-  const response = await api.get('/api/news/admin/all');
-  return response.data;
+  try {
+    const response = await api.get('/api/news/admin');
+    // The API returns { articles: [...] }, extract the array
+    const data = response.data;
+    if (data && data.articles) {
+      return data.articles;
+    }
+    // If it's already an array, return as-is
+    if (Array.isArray(data)) {
+      return data;
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching admin news:', error);
+    return [];
+  }
 };
 
 export const createNews = async (data: any): Promise<NewsItem> => {

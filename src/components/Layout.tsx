@@ -3,6 +3,7 @@
 import { Header } from "./Header"
 import { SkipLink } from "./SkipLink"
 import { WhatsAppButton } from "./WhatsAppButton"
+import { CookieConsent } from "./CookieConsent"
 import { ReactNode } from "react"
 
 import { usePathname } from "next/navigation"
@@ -36,6 +37,9 @@ export function Layout({ children }: LayoutProps) {
           className="rounded-full w-14 h-14 p-0 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
         />
       </div>
+
+      {/* Cookie Consent Banner */}
+      <CookieConsent position="bottom" theme="dark" />
     </div>
   )
 }

@@ -20,7 +20,9 @@ import {
     User,
     BarChart3,
     Box,
-    Cookie
+    Cookie,
+    Image,
+    FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,6 +43,8 @@ const navigation = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
     { name: 'Cookie Consent', href: '/admin/cookie-consent', icon: Cookie },
+    { name: 'Banners', href: '/admin/banners', icon: Image },
+    { name: 'News', href: '/admin/news', icon: FileText },
     { name: 'Inventory', href: '/admin/inventory', icon: Box },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
     { name: 'Products', href: '/admin/products', icon: Package },

@@ -243,6 +243,16 @@ export function Footer() {
               >
                 Contact Us
               </a>
+              <a
+                href="/cookie-policy"
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push('/cookie-policy');
+                }}
+                className="text-gray-400 hover:text-yellow transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow focus:ring-offset-2 focus:ring-offset-gray-800 rounded"
+              >
+                Cookie Policy
+              </a>
             </nav>
           </div>
         </div>

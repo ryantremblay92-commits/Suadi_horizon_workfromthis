@@ -42,10 +42,22 @@ export async function GET(request: NextRequest) {
 
         const { searchParams } = new URL(request.url);
         const userId = searchParams.get('userId');
+        const admin = searchParams.get('admin');
 
+        // If admin parameter is set, return all orders (for admin panel)
+        if (admin === 'true' || admin === '1') {
+            const orders = await Order.find()
+                .populate('items.product')
+                .populate('user', 'email name')
+                .sort({ createdAt: -1 });
+
+            return NextResponse.json({ orders });
+        }
+
+        // Regular user order fetch requires userId
         if (!userId) {
             return NextResponse.json(
-                { message: 'userId is required' },
+                { message: 'userId is required for regular users' },
                 { status: 400 }
             );
         }
@@ -54,7 +66,7 @@ export async function GET(request: NextRequest) {
             .populate('items.product')
             .sort({ createdAt: -1 });
 
-        return NextResponse.json(orders);
+        return NextResponse.json({ orders });
     } catch (error: unknown) {
         console.error('Error fetching orders:', error);
         return NextResponse.json(

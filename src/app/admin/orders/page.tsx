@@ -41,7 +41,8 @@ export default function AdminOrdersPage() {
             const token = localStorage.getItem('accessToken');
             const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
 
-            const response = await fetch('/api/orders', { headers });
+            // Add admin=true to get all orders for admin panel
+            const response = await fetch('/api/orders?admin=true', { headers });
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || errorData.message || 'Failed to load orders');
